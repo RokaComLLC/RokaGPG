@@ -18,7 +18,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-
+#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,6 +36,7 @@
 #include <sys/lock.h>
 #endif
 #endif
+
 
 #include "types.h"
 #include "memory.h"

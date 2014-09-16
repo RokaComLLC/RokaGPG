@@ -21,7 +21,7 @@
 #define G10_UTIL_H
 
 #include <stdarg.h>
-
+#include "config.h"
 #include "types.h"
 #include "errors.h"
 #include "types.h"
