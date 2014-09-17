@@ -121,7 +121,7 @@ generate( RSA_secret_key *sk, unsigned nbits )
       p = generate_secret_prime( nbits / 2 );
       q = generate_secret_prime( nbits / 2 );
       if( mpi_cmp( p, q ) > 0 ) /* p shall be smaller than q (for calc of u)*/
-        mpi_swap(p,q);
+        mpi_swap_gpg(p,q);
       /* calculate the modulus */
       mpi_mul( n, p, q );
     } while ( mpi_get_nbits(n) != nbits );

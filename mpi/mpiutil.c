@@ -460,7 +460,7 @@ mpi_alloc_set_ui( unsigned long u)
 
 
 void
-mpi_swap( MPI a, MPI b)
+mpi_swap_gpg( MPI a, MPI b)
 {
     struct gcry_mpi tmp;
 

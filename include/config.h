@@ -742,7 +742,7 @@
 #define USE_BLOWFISH 1
 
 /* Define to include the CAMELLIA cipher */
-#define USE_CAMELLIA 1
+/* #define USE_CAMELLIA 1 */
 
 /* define if capabilities should be used */
 /* #undef USE_CAPABILITIES */

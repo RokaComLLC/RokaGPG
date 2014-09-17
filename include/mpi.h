@@ -83,7 +83,7 @@ void mpi_set( MPI w, MPI u);
 void mpi_set_ui( MPI w, ulong u);
 MPI  mpi_alloc_set_ui( unsigned long u);
 void mpi_m_check( MPI a );
-void mpi_swap( MPI a, MPI b);
+void mpi_swap_gpg( MPI a, MPI b);
 int  mpi_get_nlimbs (MPI a);
 int  mpi_is_neg (MPI a);
 unsigned int mpi_nlimb_hint_from_nbytes (unsigned int nbytes);
