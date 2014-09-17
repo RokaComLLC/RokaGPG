@@ -220,9 +220,6 @@ set_keyrings()
 
 void RokaGPG_Init(){
     
-    //STRLIST sl, remusr= NULL, locusr=NULL;
-    //STRLIST nrings=NULL, sec_nrings=NULL;
-    
     secmem_set_flags( secmem_get_flags() | 2 ); /* suspend warnings */
   
     
@@ -259,11 +256,6 @@ void RokaGPG_Init(){
    // secmem_init(32768);  //Value from g10/gpg.c
     
     secmem_init(4194304);
-    
-    int retVal = check_cipher_algo(CIPHER_ALGO_AES256);
-    
-    fprintf(stderr,"AES256: %d\n",retVal );
-    
     
     //Set up the trustDB
      setup_trustdb(1, "trustdb.gpg");

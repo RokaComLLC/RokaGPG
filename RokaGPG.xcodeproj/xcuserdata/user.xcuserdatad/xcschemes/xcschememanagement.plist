@@ -9,6 +9,11 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>RokaGPGUniversal.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
@@ -18,6 +23,11 @@
 			<true/>
 		</dict>
 		<key>CE2680CE19C8893C008E196A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CE2682E019C8E8A9008E196A</key>
 		<dict>
 			<key>primary</key>
 			<true/>

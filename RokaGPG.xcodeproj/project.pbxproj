@@ -6,10 +6,22 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		CE2682E019C8E8A9008E196A /* RokaGPGUniversal */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = CE2682E119C8E8A9008E196A /* Build configuration list for PBXAggregateTarget "RokaGPGUniversal" */;
+			buildPhases = (
+				CE2682E419C8EA8D008E196A /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = RokaGPGUniversal;
+			productName = RokaGPGUniversal;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		CE2680C319C8893B008E196A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2680C219C8893B008E196A /* Foundation.framework */; };
-		CE2680D219C8893C008E196A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2680C219C8893B008E196A /* Foundation.framework */; };
-		CE2680D719C8893C008E196A /* libRokaGPG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2680BF19C8893B008E196A /* libRokaGPG.a */; };
 		CE26826219C8C1EC008E196A /* cipher.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2681E519C8C1EC008E196A /* cipher.c */; };
 		CE26826319C8C1EC008E196A /* des.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2681E619C8C1EC008E196A /* des.c */; };
 		CE26826419C8C1EC008E196A /* dsa.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2681E719C8C1EC008E196A /* dsa.c */; };
@@ -110,16 +122,6 @@
 		CE2682D519C8C407008E196A /* libgpg-error.a in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE26824419C8C1EC008E196A /* libgpg-error.a */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		CE2680D519C8893C008E196A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CE2680B719C8893B008E196A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = CE2680BE19C8893B008E196A;
-			remoteInfo = RokaGPG;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		CE2680BD19C8893B008E196A /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -138,7 +140,6 @@
 /* Begin PBXFileReference section */
 		CE2680BF19C8893B008E196A /* libRokaGPG.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRokaGPG.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE2680C219C8893B008E196A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		CE2680CF19C8893C008E196A /* RokaGPGTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RokaGPGTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE2681E319C8C1EC008E196A /* algorithms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = algorithms.h; sourceTree = "<group>"; };
 		CE2681E419C8C1EC008E196A /* bithelp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bithelp.h; sourceTree = "<group>"; };
 		CE2681E519C8C1EC008E196A /* cipher.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cipher.c; sourceTree = "<group>"; };
@@ -290,15 +291,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CE2680CC19C8893C008E196A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				CE2680D719C8893C008E196A /* libRokaGPG.a in Frameworks */,
-				CE2680D219C8893C008E196A /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -315,7 +307,6 @@
 			isa = PBXGroup;
 			children = (
 				CE2680BF19C8893B008E196A /* libRokaGPG.a */,
-				CE2680CF19C8893C008E196A /* RokaGPGTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -557,24 +548,6 @@
 			productReference = CE2680BF19C8893B008E196A /* libRokaGPG.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		CE2680CE19C8893C008E196A /* RokaGPGTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = CE2680E519C8893C008E196A /* Build configuration list for PBXNativeTarget "RokaGPGTests" */;
-			buildPhases = (
-				CE2680CB19C8893C008E196A /* Sources */,
-				CE2680CC19C8893C008E196A /* Frameworks */,
-				CE2680CD19C8893C008E196A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				CE2680D619C8893C008E196A /* PBXTargetDependency */,
-			);
-			name = RokaGPGTests;
-			productName = RokaGPGTests;
-			productReference = CE2680CF19C8893C008E196A /* RokaGPGTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -597,20 +570,26 @@
 			projectRoot = "";
 			targets = (
 				CE2680BE19C8893B008E196A /* RokaGPG */,
-				CE2680CE19C8893C008E196A /* RokaGPGTests */,
+				CE2682E019C8E8A9008E196A /* RokaGPGUniversal */,
 			);
 		};
 /* End PBXProject section */
 
-/* Begin PBXResourcesBuildPhase section */
-		CE2680CD19C8893C008E196A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
+/* Begin PBXShellScriptBuildPhase section */
+		CE2682E419C8EA8D008E196A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
 			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# define output folder environment variable\nUNIVERSAL_OUTPUTFOLDER=${SOURCE_ROOT}/${CONFIGURATION}-universal\n\n# Step 1. Build Device and Simulator versions\n#xcodebuild -target RokaGPG ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\nxcodebuild -target RokaGPG -configuration ${CONFIGURATION} -sdk iphonesimulator -USER_HEADER_SEARCH_PATHS=${SOURCE_ROOT}/include/ -arch i386 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n# make sure the output directory exists\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\necho ${UNIVERSAL_OUTPUTFOLDER}\n\n# Step 2. Create universal binary file using lipo\n#lipo -create -output \"${UNIVERSAL_OUTPUTFOLDER}/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}.a\"\n\n# Last touch. copy the header files. Just for convenience\ncp -R \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/include\" \"${UNIVERSAL_OUTPUTFOLDER}/\"\n\ncp -R \"{BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}.a\" \"${UNIVERSAL_OUTPUTFOLDER}\"";
 		};
-/* End PBXResourcesBuildPhase section */
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		CE2680BB19C8893B008E196A /* Sources */ = {
@@ -713,22 +692,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CE2680CB19C8893C008E196A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		CE2680D619C8893C008E196A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = CE2680BE19C8893B008E196A /* RokaGPG */;
-			targetProxy = CE2680D519C8893C008E196A /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		CE2680E019C8893C008E196A /* Debug */ = {
@@ -763,7 +727,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -802,6 +766,10 @@
 		CE2680E319C8893C008E196A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					i386,
+				);
 				DSTROOT = /tmp/RokaGPG.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
@@ -813,12 +781,17 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
 			name = Debug;
 		};
 		CE2680E419C8893C008E196A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					i386,
+				);
 				DSTROOT = /tmp/RokaGPG.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
@@ -830,42 +803,21 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
 			name = Release;
 		};
-		CE2680E619C8893C008E196A /* Debug */ = {
+		CE2682E219C8E8A9008E196A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "RokaGPG/RokaGPG-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "RokaGPGTests/RokaGPGTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
 		};
-		CE2680E719C8893C008E196A /* Release */ = {
+		CE2682E319C8E8A9008E196A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "RokaGPG/RokaGPG-Prefix.pch";
-				INFOPLIST_FILE = "RokaGPGTests/RokaGPGTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
 		};
@@ -890,14 +842,13 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CE2680E519C8893C008E196A /* Build configuration list for PBXNativeTarget "RokaGPGTests" */ = {
+		CE2682E119C8E8A9008E196A /* Build configuration list for PBXAggregateTarget "RokaGPGUniversal" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CE2680E619C8893C008E196A /* Debug */,
-				CE2680E719C8893C008E196A /* Release */,
+				CE2682E219C8E8A9008E196A /* Debug */,
+				CE2682E319C8E8A9008E196A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
