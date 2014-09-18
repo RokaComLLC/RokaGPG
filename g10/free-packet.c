@@ -162,10 +162,10 @@ copy_public_key ( PKT_public_key *d, PKT_public_key *s)
     d->prefs = copy_prefs (s->prefs);
     n = pubkey_get_npkey( s->pubkey_algo );
     if( !n )
-	d->pkey[0] = mpi_copy(s->pkey[0]);
+	d->pkey[0] = mpi_copy_gpg(s->pkey[0]);
     else {
 	for(i=0; i < n; i++ )
-	    d->pkey[i] = mpi_copy( s->pkey[i] );
+	    d->pkey[i] = mpi_copy_gpg( s->pkey[i] );
     }
     if( !s->revkey && s->numrevkeys )
         BUG();
@@ -225,10 +225,10 @@ copy_signature( PKT_signature *d, PKT_signature *s )
     memcpy( d, s, sizeof *d );
     n = pubkey_get_nsig( s->pubkey_algo );
     if( !n )
-	d->data[0] = mpi_copy(s->data[0]);
+	d->data[0] = mpi_copy_gpg(s->data[0]);
     else {
 	for(i=0; i < n; i++ )
-	    d->data[i] = mpi_copy( s->data[i] );
+	    d->data[i] = mpi_copy_gpg( s->data[i] );
     }
     d->pka_info = s->pka_info? cp_pka_info (s->pka_info) : NULL;
     d->hashed = cp_subpktarea (s->hashed);
@@ -289,10 +289,10 @@ copy_secret_key( PKT_secret_key *d, PKT_secret_key *s )
     memcpy( d, s, sizeof *d );
     n = pubkey_get_nskey( s->pubkey_algo );
     if( !n )
-  	d->skey[0] = mpi_copy(s->skey[0]);
+  	d->skey[0] = mpi_copy_gpg(s->skey[0]);
     else {
 	for(i=0; i < n; i++ )
-  	    d->skey[i] = mpi_copy( s->skey[i] );
+  	    d->skey[i] = mpi_copy_gpg( s->skey[i] );
     }
 
     return d;

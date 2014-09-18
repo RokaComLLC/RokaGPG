@@ -46,7 +46,7 @@ mpi_fdiv_r( MPI rem, MPI dividend, MPI divisor )
      * preliminary calculated.	We have to copy it to temporary space if it's
      * the same variable as REM.  */
     if( rem == divisor ) {
-	temp_divisor = mpi_copy( divisor );
+	temp_divisor = mpi_copy_gpg( divisor );
 	divisor = temp_divisor;
     }
 
@@ -99,7 +99,7 @@ mpi_fdiv_qr( MPI quot, MPI rem, MPI dividend, MPI divisor )
     MPI temp_divisor = NULL;
 
     if( quot == divisor || rem == divisor ) {
-	temp_divisor = mpi_copy( divisor );
+	temp_divisor = mpi_copy_gpg( divisor );
 	divisor = temp_divisor;
     }
 

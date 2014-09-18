@@ -216,7 +216,7 @@ void
 mpi_sub(MPI w, MPI u, MPI v)
 {
     if( w == v ) {
-	MPI vv = mpi_copy(v);
+	MPI vv = mpi_copy_gpg(v);
 	vv->sign = !vv->sign;
 	mpi_add( w, u, vv );
 	mpi_free(vv);

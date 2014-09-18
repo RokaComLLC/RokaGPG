@@ -1142,7 +1142,7 @@ sec_to_pub_keyblock(KBNODE sec_keyblock)
 	      int i;
 
 	      for(i=0;i<n;i++)
-		pk->pkey[i]=mpi_copy(sk->skey[i]);
+		pk->pkey[i]=mpi_copy_gpg(sk->skey[i]);
 	    }
 
 	  pubnode=new_kbnode(pkt);
@@ -2346,7 +2346,7 @@ pub_to_sec_keyblock (KBNODE pub_keyblock)
             n = 1; /* Unknown number of parameters, however the data
                       is stored in the first mpi. */
           for (i=0; i < n; i++ )
-            sk->skey[i] = mpi_copy (pk->pkey[i]);
+            sk->skey[i] = mpi_copy_gpg (pk->pkey[i]);
 
           sk->is_protected = 1;
           sk->protect.s2k.mode = 1001;

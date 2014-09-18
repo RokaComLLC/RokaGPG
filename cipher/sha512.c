@@ -48,7 +48,7 @@
  */
 
 
-#include <config.h>
+#include "config.h"
 #include <string.h>
 #include "util.h"
 #include "algorithms.h"

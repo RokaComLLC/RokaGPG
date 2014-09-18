@@ -35,14 +35,14 @@ mpi_invm( MPI x, MPI a, MPI n )
     MPI u, v, u1, u2, u3, v1, v2, v3, q, t1, t2, t3;
     MPI ta, tb, tc;
 
-    u = mpi_copy(a);
-    v = mpi_copy(n);
+    u = mpi_copy_gpg(a);
+    v = mpi_copy_gpg(n);
     u1 = mpi_alloc_set_ui(1);
     u2 = mpi_alloc_set_ui(0);
-    u3 = mpi_copy(u);
+    u3 = mpi_copy_gpg(u);
     v1 = mpi_alloc_set_ui(0);
     v2 = mpi_alloc_set_ui(1);
-    v3 = mpi_copy(v);
+    v3 = mpi_copy_gpg(v);
     q  = mpi_alloc( mpi_get_nlimbs(u)+1 );
     t1 = mpi_alloc( mpi_get_nlimbs(u)+1 );
     t2 = mpi_alloc( mpi_get_nlimbs(u)+1 );
@@ -84,8 +84,8 @@ mpi_invm( MPI x, MPI a, MPI n )
     unsigned k;
     int sign;
 
-    u = mpi_copy(a);
-    v = mpi_copy(n);
+    u = mpi_copy_gpg(a);
+    v = mpi_copy_gpg(n);
     for(k=0; !mpi_test_bit(u,0) && !mpi_test_bit(v,0); k++ ) {
 	mpi_rshift(u, u, 1);
 	mpi_rshift(v, v, 1);
@@ -94,20 +94,20 @@ mpi_invm( MPI x, MPI a, MPI n )
 
     u1 = mpi_alloc_set_ui(1);
     u2 = mpi_alloc_set_ui(0);
-    u3 = mpi_copy(u);
-    v1 = mpi_copy(v);				   /* !-- used as const 1 */
+    u3 = mpi_copy_gpg(u);
+    v1 = mpi_copy_gpg(v);				   /* !-- used as const 1 */
     v2 = mpi_alloc( mpi_get_nlimbs(u) ); mpi_sub( v2, u1, u );
-    v3 = mpi_copy(v);
+    v3 = mpi_copy_gpg(v);
     if( mpi_test_bit(u, 0) ) { /* u is odd */
 	t1 = mpi_alloc_set_ui(0);
 	t2 = mpi_alloc_set_ui(1); t2->sign = 1;
-	t3 = mpi_copy(v); t3->sign = !t3->sign;
+	t3 = mpi_copy_gpg(v); t3->sign = !t3->sign;
 	goto Y4;
     }
     else {
 	t1 = mpi_alloc_set_ui(1);
 	t2 = mpi_alloc_set_ui(0);
-	t3 = mpi_copy(u);
+	t3 = mpi_copy_gpg(u);
     }
     do {
 	do {
@@ -165,8 +165,8 @@ mpi_invm( MPI x, MPI a, MPI n )
     int sign;
     int odd ;
 
-    u = mpi_copy(a);
-    v = mpi_copy(n);
+    u = mpi_copy_gpg(a);
+    v = mpi_copy_gpg(n);
 
     for(k=0; !mpi_test_bit(u,0) && !mpi_test_bit(v,0); k++ ) {
 	mpi_rshift(u, u, 1);
@@ -177,26 +177,26 @@ mpi_invm( MPI x, MPI a, MPI n )
     u1 = mpi_alloc_set_ui(1);
     if( !odd )
 	u2 = mpi_alloc_set_ui(0);
-    u3 = mpi_copy(u);
-    v1 = mpi_copy(v);
+    u3 = mpi_copy_gpg(u);
+    v1 = mpi_copy_gpg(v);
     if( !odd ) {
 	v2 = mpi_alloc( mpi_get_nlimbs(u) );
 	mpi_sub( v2, u1, u ); /* U is used as const 1 */
     }
-    v3 = mpi_copy(v);
+    v3 = mpi_copy_gpg(v);
     if( mpi_test_bit(u, 0) ) { /* u is odd */
 	t1 = mpi_alloc_set_ui(0);
 	if( !odd ) {
 	    t2 = mpi_alloc_set_ui(1); t2->sign = 1;
 	}
-	t3 = mpi_copy(v); t3->sign = !t3->sign;
+	t3 = mpi_copy_gpg(v); t3->sign = !t3->sign;
 	goto Y4;
     }
     else {
 	t1 = mpi_alloc_set_ui(1);
 	if( !odd )
 	    t2 = mpi_alloc_set_ui(0);
-	t3 = mpi_copy(u);
+	t3 = mpi_copy_gpg(u);
     }
     do {
 	do {

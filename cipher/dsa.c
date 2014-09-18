@@ -184,7 +184,7 @@ generate( DSA_secret_key *sk, unsigned nbits, unsigned qbits,
 
     p = generate_elg_prime( 1, nbits, qbits, NULL, ret_factors );
     /* get q out of factors */
-    q = mpi_copy((*ret_factors)[0]);
+    q = mpi_copy_gpg((*ret_factors)[0]);
     if( mpi_get_nbits(q) != qbits )
 	BUG();
 

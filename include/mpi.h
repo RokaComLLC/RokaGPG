@@ -58,7 +58,7 @@ typedef struct gcry_mpi *MPI;
 #define mpi_alloc_like(n)   mpi_debug_alloc_like((n), M_DBGINFO( __LINE__ ) )
 #define mpi_free(a)	      mpi_debug_free((a), M_DBGINFO(__LINE__) )
 #define mpi_resize(a,b)     mpi_debug_resize((a),(b), M_DBGINFO(__LINE__) )
-#define mpi_copy(a)	      mpi_debug_copy((a), M_DBGINFO(__LINE__) )
+#define mpi_copy_gpg(a)	      mpi_debug_copy((a), M_DBGINFO(__LINE__) )
 MPI mpi_debug_alloc( unsigned nlimbs, const char *info );
 MPI mpi_debug_alloc_secure( unsigned nlimbs, const char *info );
 MPI mpi_debug_alloc_like( MPI a, const char *info );
@@ -71,7 +71,7 @@ MPI mpi_alloc_secure( unsigned nlimbs );
 MPI mpi_alloc_like( MPI a );
 void mpi_free( MPI a );
 void mpi_resize( MPI a, unsigned nlimbs );
-MPI  mpi_copy( MPI a );
+MPI  mpi_copy_gpg( MPI a );
 #endif
 #define mpi_is_opaque(a) ((a) && (mpi_get_flags (a)&4))
 MPI mpi_set_opaque( MPI a, void *p, unsigned int len );

@@ -342,7 +342,7 @@ MPI
 #ifdef M_DEBUG
 mpi_debug_copy( MPI a, const char *info )
 #else
-mpi_copy( MPI a )
+mpi_copy_gpg( MPI a )
 #endif
 {
     int i;

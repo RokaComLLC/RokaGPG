@@ -1111,9 +1111,9 @@ gen_elg(int algo, unsigned nbits, KBNODE pub_root, KBNODE sec_root, DEK *dek,
       sk->expiredate = pk->expiredate = sk->timestamp + expireval;
 
     sk->pubkey_algo = pk->pubkey_algo = algo;
-		       pk->pkey[0] = mpi_copy( skey[0] );
-		       pk->pkey[1] = mpi_copy( skey[1] );
-		       pk->pkey[2] = mpi_copy( skey[2] );
+		       pk->pkey[0] = mpi_copy_gpg( skey[0] );
+		       pk->pkey[1] = mpi_copy_gpg( skey[1] );
+		       pk->pkey[2] = mpi_copy_gpg( skey[2] );
     sk->skey[0] = skey[0];
     sk->skey[1] = skey[1];
     sk->skey[2] = skey[2];
@@ -1235,10 +1235,10 @@ gen_dsa(unsigned int nbits, KBNODE pub_root, KBNODE sec_root, DEK *dek,
       sk->expiredate = pk->expiredate = sk->timestamp + expireval;
 
     sk->pubkey_algo = pk->pubkey_algo = PUBKEY_ALGO_DSA;
-		       pk->pkey[0] = mpi_copy( skey[0] );
-		       pk->pkey[1] = mpi_copy( skey[1] );
-		       pk->pkey[2] = mpi_copy( skey[2] );
-		       pk->pkey[3] = mpi_copy( skey[3] );
+		       pk->pkey[0] = mpi_copy_gpg( skey[0] );
+		       pk->pkey[1] = mpi_copy_gpg( skey[1] );
+		       pk->pkey[2] = mpi_copy_gpg( skey[2] );
+		       pk->pkey[3] = mpi_copy_gpg( skey[3] );
     sk->skey[0] = skey[0];
     sk->skey[1] = skey[1];
     sk->skey[2] = skey[2];
@@ -1328,8 +1328,8 @@ gen_rsa(int algo, unsigned nbits, KBNODE pub_root, KBNODE sec_root, DEK *dek,
       sk->expiredate = pk->expiredate = sk->timestamp + expireval;
 
     sk->pubkey_algo = pk->pubkey_algo = algo;
-		       pk->pkey[0] = mpi_copy( skey[0] );
-		       pk->pkey[1] = mpi_copy( skey[1] );
+		       pk->pkey[0] = mpi_copy_gpg( skey[0] );
+		       pk->pkey[1] = mpi_copy_gpg( skey[1] );
     sk->skey[0] = skey[0];
     sk->skey[1] = skey[1];
     sk->skey[2] = skey[2];

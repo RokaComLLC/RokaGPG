@@ -232,13 +232,13 @@ generate_elg_prime( int mode, unsigned pbits, unsigned qbits,
 	*ret_factors = xmalloc_clear( (n+2) * sizeof **ret_factors);
         i = 0;
 	if( mode == 1 ) {
-	    (*ret_factors)[i++] = mpi_copy( q_factor );
+	    (*ret_factors)[i++] = mpi_copy_gpg( q_factor );
 	    for(; i <= n; i++ )
-		(*ret_factors)[i] = mpi_copy( factors[i-1] );
+		(*ret_factors)[i] = mpi_copy_gpg( factors[i-1] );
 	}
 	else {
 	    for(; i < n; i++ )
-		(*ret_factors)[i] = mpi_copy( factors[i] );
+		(*ret_factors)[i] = mpi_copy_gpg( factors[i] );
 	}
     }
 
@@ -451,7 +451,7 @@ is_prime( MPI n, int steps, int *count )
     mpi_sub_ui( nminus1, n, 1 );
 
     /* find q and k, so that n = 1 + 2^k * q */
-    q = mpi_copy( nminus1 );
+    q = mpi_copy_gpg( nminus1 );
     k = mpi_trailing_zeros( q );
     mpi_tdiv_q_2exp(q, q, k);
 

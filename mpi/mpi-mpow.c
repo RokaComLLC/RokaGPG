@@ -80,7 +80,7 @@ mpi_mulpowm( MPI res, MPI *basearray, MPI *exparray, MPI m)
 		for(j=0; j < k; j++ ) {
 		    if( (idx & (1<<j) ) ) {
 			if( !G[idx] )
-			    G[idx] = mpi_copy( basearray[j] );
+			    G[idx] = mpi_copy_gpg( basearray[j] );
 			else
 			    mpi_mulm( G[idx], G[idx], basearray[j], m );
 		    }

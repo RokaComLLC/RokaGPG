@@ -156,7 +156,7 @@ gen_k( MPI p, int small_k )
 {
     MPI k = mpi_alloc_secure( 0 );
     MPI temp = mpi_alloc( mpi_get_nlimbs(p) );
-    MPI p_1 = mpi_copy(p);
+    MPI p_1 = mpi_copy_gpg(p);
     unsigned int orig_nbits = mpi_get_nbits(p);
     unsigned int nbits;
     unsigned int nbytes;

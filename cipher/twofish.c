@@ -21,7 +21,7 @@
  * are unrolled, precomputation tables are used, etc., for maximum speed at
  * some cost in memory consumption. */
 
-#include <config.h>
+#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h> /* for memcmp() */
