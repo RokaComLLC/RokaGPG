@@ -201,7 +201,7 @@ mpi_powm( MPI res, MPI base, MPI exponent, MPI mod)
 			tspace = mpi_alloc_limb_space( tsize, 0 );
 		    }
 		    else if( tsize < (2*rsize) ) {
-			mpi_free_limb_space( tspace );
+			mpi_free_gpg_limb_space( tspace );
 			tsize = 2 * rsize;
 			tspace = mpi_alloc_limb_space( tsize, 0 );
 		    }
@@ -300,11 +300,11 @@ mpi_powm( MPI res, MPI base, MPI exponent, MPI mod)
 
   leave:
     if( assign_rp ) mpi_assign_limb_space( res, rp, size );
-    if( mp_marker ) mpi_free_limb_space( mp_marker );
-    if( bp_marker ) mpi_free_limb_space( bp_marker );
-    if( ep_marker ) mpi_free_limb_space( ep_marker );
-    if( xp_marker ) mpi_free_limb_space( xp_marker );
-    if( tspace )    mpi_free_limb_space( tspace );
+    if( mp_marker ) mpi_free_gpg_limb_space( mp_marker );
+    if( bp_marker ) mpi_free_gpg_limb_space( bp_marker );
+    if( ep_marker ) mpi_free_gpg_limb_space( ep_marker );
+    if( xp_marker ) mpi_free_gpg_limb_space( xp_marker );
+    if( tspace )    mpi_free_gpg_limb_space( tspace );
 }
 #else /*!USE_ALGORITHM_SIMPLE_EXPONENTIATION */
 
@@ -714,7 +714,7 @@ mpi_powm (MPI res, MPI base, MPI expo, MPI mod)
 
     mpihelp_release_karatsuba_ctx (&karactx );
     for (i = 0; i < (1 << (W - 1)) - 1; i++)
-      mpi_free_limb_space (b_2i3[i]);
+      mpi_free_gpg_limb_space (b_2i3[i]);
   }
 
   /* Fixup for negative results.  */
@@ -733,13 +733,13 @@ mpi_powm (MPI res, MPI base, MPI expo, MPI mod)
 
  leave:
   if (mp_marker)
-    mpi_free_limb_space (mp_marker);
+    mpi_free_gpg_limb_space (mp_marker);
   if (bp_marker)
-    mpi_free_limb_space (bp_marker);
+    mpi_free_gpg_limb_space (bp_marker);
   if (ep_marker)
-    mpi_free_limb_space (ep_marker);
+    mpi_free_gpg_limb_space (ep_marker);
   if (xp_marker)
-    mpi_free_limb_space (xp_marker);
+    mpi_free_gpg_limb_space (xp_marker);
 }
 #endif /*!USE_ALGORITHM_SIMPLE_EXPONENTIATION */
 

@@ -23,13 +23,13 @@
    patent into the public domain on Sep 6th, 2000.
 */
 
-#include "config.h"
+#include "../include/config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "util.h"
 #include "mpi.h"
-#include "cipher.h"
+#include "../include/cipher.h"
 #include "rsa.h"
 
 /* Blinding is used to mitigate side-channel attacks.  You may undef
@@ -83,9 +83,9 @@ test_keys( RSA_secret_key *sk, unsigned nbits )
     public( out2, out1, &pk );
     if( mpi_cmp( test, out2 ) )
 	log_fatal("RSA operation: secret, public failed\n");
-    mpi_free( test );
-    mpi_free( out1 );
-    mpi_free( out2 );
+    mpi_free_gpg( test );
+    mpi_free_gpg( out1 );
+    mpi_free_gpg( out2 );
 }
 
 /****************
@@ -115,9 +115,9 @@ generate( RSA_secret_key *sk, unsigned nbits )
     do {
       /* select two (very secret) primes */
       if (p)
-        mpi_free (p);
+        mpi_free_gpg (p);
       if (q)
-        mpi_free (q);
+        mpi_free_gpg (q);
       p = generate_secret_prime( nbits / 2 );
       q = generate_secret_prime( nbits / 2 );
       if( mpi_cmp( p, q ) > 0 ) /* p shall be smaller than q (for calc of u)*/
@@ -135,7 +135,7 @@ generate( RSA_secret_key *sk, unsigned nbits )
     mpi_sub_ui( t1, p, 1 );
     mpi_sub_ui( t2, q, 1 );
     mpi_mul( phi, t1, t2 );
-    mpi_gcd(g, t1, t2);
+    mpi_gcd_gpg(g, t1, t2);
     mpi_fdiv_q(f, phi, g);
 
     /* Find an public exponent.
@@ -151,7 +151,7 @@ generate( RSA_secret_key *sk, unsigned nbits )
      */
     e = mpi_alloc ( mpi_nlimb_hint_from_nbits (32) );
     mpi_set_ui( e, 65537);
-    while( !mpi_gcd(t1, e, phi) ) /* (while gcd is not 1) */
+    while( !mpi_gcd_gpg(t1, e, phi) ) /* (while gcd is not 1) */
       mpi_add_ui( e, e, 2);
 
     /* calculate the secret key d = e^1 mod phi */
@@ -173,11 +173,11 @@ generate( RSA_secret_key *sk, unsigned nbits )
 	log_mpidump("  u= ", u );
     }
 
-    mpi_free(t1);
-    mpi_free(t2);
-    mpi_free(phi);
-    mpi_free(f);
-    mpi_free(g);
+    mpi_free_gpg(t1);
+    mpi_free_gpg(t2);
+    mpi_free_gpg(phi);
+    mpi_free_gpg(f);
+    mpi_free_gpg(g);
 
     sk->n = n;
     sk->e = e;
@@ -203,7 +203,7 @@ check_secret_key( RSA_secret_key *sk )
 
     mpi_mul(temp, sk->p, sk->q );
     rc = mpi_cmp( temp, sk->n );
-    mpi_free(temp);
+    mpi_free_gpg(temp);
     return !rc;
 }
 
@@ -223,7 +223,7 @@ public(MPI output, MPI input, RSA_public_key *pkey )
 	MPI x = mpi_alloc( mpi_get_nlimbs(input)*2 );
 	mpi_powm( x, input, pkey->e, pkey->n );
 	mpi_set(output, x);
-	mpi_free(x);
+	mpi_free_gpg(x);
     }
     else
 	mpi_powm( output, input, pkey->e, pkey->n );
@@ -262,7 +262,7 @@ stronger_key_check ( RSA_secret_key *skey )
     mpi_sub_ui( t1, skey->p, 1 );
     mpi_sub_ui( t2, skey->q, 1 );
     mpi_mul( phi, t1, t2 );
-    mpi_gcd(t, t1, t2);
+    mpi_gcd_gpg(t, t1, t2);
     mpi_fdiv_q(t, phi, t);
     mpi_invm(t, skey->e, t );
     if ( mpi_cmp(t, skey->d ) )
@@ -275,10 +275,10 @@ stronger_key_check ( RSA_secret_key *skey )
 
     log_info ( "RSA secret key check finished\n");
 
-    mpi_free (t);
-    mpi_free (t1);
-    mpi_free (t2);
-    mpi_free (phi);
+    mpi_free_gpg (t);
+    mpi_free_gpg (t1);
+    mpi_free_gpg (t2);
+    mpi_free_gpg (phi);
 }
 #endif
 
@@ -343,16 +343,16 @@ secret(MPI output, MPI input, RSA_secret_key *skey )
     mpi_add ( output, m1, h );
 
 # ifdef USE_BLINDING
-    mpi_free (bdata);
+    mpi_free_gpg (bdata);
     /* Unblind: output = (output * r^(-1)) mod n  */
     mpi_invm (r, r, skey->n);
     mpi_mulm (output, output, r, skey->n);
-    mpi_free (r);
+    mpi_free_gpg (r);
 # endif /* USE_BLINDING */
 
-    mpi_free ( h );
-    mpi_free ( m1 );
-    mpi_free ( m2 );
+    mpi_free_gpg ( h );
+    mpi_free_gpg ( m1 );
+    mpi_free_gpg ( m2 );
 #endif
 }
 
@@ -444,7 +444,7 @@ rsa_decrypt( int algo, MPI *result, MPI *data, MPI *skey )
     mpi_fdiv_r (input, data[0], sk.n);
     *result = mpi_alloc_secure (mpi_get_nlimbs (sk.n));
     secret (*result, input, &sk);
-    mpi_free (input);
+    mpi_free_gpg (input);
     return 0;
 }
 
@@ -482,7 +482,7 @@ rsa_verify( int algo, MPI hash, MPI *data, MPI *pkey )
     result = mpi_alloc ( mpi_nlimb_hint_from_nbits (160) );
     public( result, data[0], &pk );
     rc = mpi_cmp( result, hash )? G10ERR_BAD_SIGN:0;
-    mpi_free(result);
+    mpi_free_gpg(result);
 
     return rc;
 }

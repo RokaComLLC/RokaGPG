@@ -111,7 +111,7 @@ mpi_test_bit( MPI a, unsigned n )
  * Set bit N of A.
  */
 void
-mpi_set_bit( MPI a, unsigned n )
+mpi_set_bit_gpg( MPI a, unsigned n )
 {
     unsigned limbno, bitno;
 

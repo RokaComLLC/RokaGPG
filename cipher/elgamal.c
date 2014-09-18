@@ -22,13 +22,13 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
+#include "../include/config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "util.h"
 #include "mpi.h"
-#include "cipher.h"
+#include "../include/cipher.h"
 #include "elgamal.h"
 
 typedef struct {
@@ -139,10 +139,10 @@ test_keys( ELG_secret_key *sk, unsigned int nbits )
     if( mpi_cmp( test, out2 ) )
 	log_fatal("Elgamal operation: encrypt, decrypt failed\n");
 
-    mpi_free( test );
-    mpi_free( out1_a );
-    mpi_free( out1_b );
-    mpi_free( out2 );
+    mpi_free_gpg( test );
+    mpi_free_gpg( out1_a );
+    mpi_free_gpg( out1_b );
+    mpi_free_gpg( out2 );
 }
 
 
@@ -207,7 +207,7 @@ gen_k( MPI p, int small_k )
 		    progress('-');
 		break; /* no */
 	    }
-	    if( mpi_gcd( temp, k, p_1 ) )
+	    if( mpi_gcd_gpg( temp, k, p_1 ) )
 		goto found;  /* okay, k is relatively prime to (p-1) */
 	    mpi_add_ui( k, k, 1 );
 	    if( DBG_CIPHER )
@@ -218,8 +218,8 @@ gen_k( MPI p, int small_k )
     xfree(rndbuf);
     if( DBG_CIPHER )
 	progress('\n');
-    mpi_free(p_1);
-    mpi_free(temp);
+    mpi_free_gpg(p_1);
+    mpi_free_gpg(temp);
 
     return k;
 }
@@ -314,8 +314,8 @@ generate(  ELG_secret_key *sk, unsigned int nbits, MPI **ret_factors )
     /* now we can test our keys (this should never fail!) */
     test_keys( sk, nbits - 64 );
 
-    mpi_free( p_min1 );
-    mpi_free( temp   );
+    mpi_free_gpg( p_min1 );
+    mpi_free_gpg( temp   );
 }
 
 
@@ -331,7 +331,7 @@ check_secret_key( ELG_secret_key *sk )
 
     mpi_powm( y, sk->g, sk->x, sk->p );
     rc = !mpi_cmp( y, sk->y );
-    mpi_free( y );
+    mpi_free_gpg( y );
     return rc;
 }
 
@@ -365,7 +365,7 @@ do_encrypt(MPI a, MPI b, MPI input, ELG_public_key *pkey )
 	log_mpidump("elg encrypted b= ", b);
     }
 #endif
-    mpi_free(k);
+    mpi_free_gpg(k);
 }
 
 
@@ -390,7 +390,7 @@ decrypt(MPI output, MPI a, MPI b, ELG_secret_key *skey )
 	log_mpidump("elg decrypted M= ", output);
     }
 #endif
-    mpi_free(t1);
+    mpi_free_gpg(t1);
 }
 
 

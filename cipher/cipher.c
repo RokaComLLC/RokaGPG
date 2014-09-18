@@ -18,6 +18,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "../include/config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,7 +26,7 @@
 #include <assert.h>
 #include "util.h"
 #include "errors.h"
-#include "cipher.h"
+#include "../include/cipher.h"
 #include "algorithms.h"
 
 

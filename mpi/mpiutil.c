@@ -32,7 +32,7 @@
 #ifdef M_DEBUG
 #undef mpi_alloc
 #undef mpi_alloc_secure
-#undef mpi_free
+#undef mpi_free_gpg
 #endif
 
 /****************
@@ -153,13 +153,13 @@ void
 #ifdef M_DEBUG
 mpi_debug_free_limb_space( mpi_ptr_t a, const char *info )
 #else
-mpi_free_limb_space( mpi_ptr_t a )
+mpi_free_gpg_limb_space( mpi_ptr_t a )
 #endif
 {
     if( !a )
 	return;
     if( DBG_MEMORY )
-	log_debug("mpi_free_limb_space of size %lu\n", (ulong)m_size(a)*8 );
+	log_debug("mpi_free_gpg_limb_space of size %lu\n", (ulong)m_size(a)*8 );
 
 #if 0
     if( !m_is_secure(a) ) {
@@ -191,7 +191,7 @@ mpi_free_limb_space( mpi_ptr_t a )
 void
 mpi_assign_limb_space( MPI a, mpi_ptr_t ap, unsigned nlimbs )
 {
-    mpi_free_limb_space(a->d);
+    mpi_free_gpg_limb_space(a->d);
     a->d = ap;
     a->alloced = nlimbs;
 }
@@ -243,20 +243,20 @@ void
 #ifdef M_DEBUG
 mpi_debug_free( MPI a, const char *info )
 #else
-mpi_free( MPI a )
+mpi_free_gpg( MPI a )
 #endif
 {
     if( !a )
 	return;
     if( DBG_MEMORY )
-	log_debug("mpi_free\n" );
+	log_debug("mpi_free_gpg\n" );
     if( a->flags & 4 )
 	xfree( a->d );
     else {
 #ifdef M_DEBUG
 	mpi_debug_free_limb_space(a->d, info);
 #else
-	mpi_free_limb_space(a->d);
+	mpi_free_gpg_limb_space(a->d);
 #endif
     }
     if( a->flags & ~7 )
@@ -288,7 +288,7 @@ mpi_set_secure( MPI a )
 #ifdef M_DEBUG
     mpi_debug_free_limb_space(ap, "set_secure");
 #else
-    mpi_free_limb_space(ap);
+    mpi_free_gpg_limb_space(ap);
 #endif
 }
 
@@ -310,7 +310,7 @@ mpi_set_opaque( MPI a, void *p, unsigned int len )
 #ifdef M_DEBUG
 	mpi_debug_free_limb_space(a->d, "alloc_opaque");
 #else
-	mpi_free_limb_space(a->d);
+	mpi_free_gpg_limb_space(a->d);
 #endif
     }
 

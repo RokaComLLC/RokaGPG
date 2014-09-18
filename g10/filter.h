@@ -21,7 +21,7 @@
 #define G10_FILTER_H
 
 #include "types.h"
-#include "cipher.h"
+#include "../include/cipher.h"
 
 typedef struct {
     MD_HANDLE md;      /* catch all */

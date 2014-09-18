@@ -44,9 +44,9 @@ free_pubkey_enc( PKT_pubkey_enc *enc )
     int n, i;
     n = pubkey_get_nenc( enc->pubkey_algo );
     if( !n )
-	mpi_free(enc->data[0]);
+	mpi_free_gpg(enc->data[0]);
     for(i=0; i < n; i++ )
-	mpi_free( enc->data[i] );
+	mpi_free_gpg( enc->data[i] );
     xfree(enc);
 }
 
@@ -57,9 +57,9 @@ free_seckey_enc( PKT_signature *sig )
 
   n = pubkey_get_nsig( sig->pubkey_algo );
   if( !n )
-    mpi_free(sig->data[0]);
+    mpi_free_gpg(sig->data[0]);
   for(i=0; i < n; i++ )
-    mpi_free( sig->data[i] );
+    mpi_free_gpg( sig->data[i] );
 
   xfree(sig->revkey);
   xfree(sig->hashed);
@@ -81,9 +81,9 @@ release_public_key_parts( PKT_public_key *pk )
     int n, i;
     n = pubkey_get_npkey( pk->pubkey_algo );
     if( !n )
-	mpi_free(pk->pkey[0]);
+	mpi_free_gpg(pk->pkey[0]);
     for(i=0; i < n; i++ ) {
-	mpi_free( pk->pkey[i] );
+	mpi_free_gpg( pk->pkey[i] );
 	pk->pkey[i] = NULL;
     }
     if (pk->prefs) {
@@ -263,9 +263,9 @@ release_secret_key_parts( PKT_secret_key *sk )
 
     n = pubkey_get_nskey( sk->pubkey_algo );
     if( !n )
-	mpi_free(sk->skey[0]);
+	mpi_free_gpg(sk->skey[0]);
     for(i=0; i < n; i++ ) {
-	mpi_free( sk->skey[i] );
+	mpi_free_gpg( sk->skey[i] );
 	sk->skey[i] = NULL;
     }
 }

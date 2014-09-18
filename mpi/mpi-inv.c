@@ -63,18 +63,18 @@ mpi_invm( MPI x, MPI a, MPI n )
 	log_mpidump("v2=", v2); */
     mpi_set(x, u1);
 
-    mpi_free(u1);
-    mpi_free(u2);
-    mpi_free(u3);
-    mpi_free(v1);
-    mpi_free(v2);
-    mpi_free(v3);
-    mpi_free(q);
-    mpi_free(t1);
-    mpi_free(t2);
-    mpi_free(t3);
-    mpi_free(u);
-    mpi_free(v);
+    mpi_free_gpg(u1);
+    mpi_free_gpg(u2);
+    mpi_free_gpg(u3);
+    mpi_free_gpg(v1);
+    mpi_free_gpg(v2);
+    mpi_free_gpg(v3);
+    mpi_free_gpg(q);
+    mpi_free_gpg(t1);
+    mpi_free_gpg(t2);
+    mpi_free_gpg(t3);
+    mpi_free_gpg(u);
+    mpi_free_gpg(v);
 #elif 0
     /* Extended Euclid's algorithm (See TAOPC Vol II, 4.5.2, Alg X)
      * modified according to Michael Penk's solution for Exercice 35 */
@@ -147,15 +147,15 @@ mpi_invm( MPI x, MPI a, MPI n )
     /* mpi_lshift( u3, k ); */
     mpi_set(x, u1);
 
-    mpi_free(u1);
-    mpi_free(u2);
-    mpi_free(u3);
-    mpi_free(v1);
-    mpi_free(v2);
-    mpi_free(v3);
-    mpi_free(t1);
-    mpi_free(t2);
-    mpi_free(t3);
+    mpi_free_gpg(u1);
+    mpi_free_gpg(u2);
+    mpi_free_gpg(u3);
+    mpi_free_gpg(v1);
+    mpi_free_gpg(v2);
+    mpi_free_gpg(v3);
+    mpi_free_gpg(t1);
+    mpi_free_gpg(t2);
+    mpi_free_gpg(t3);
 #else
     /* Extended Euclid's algorithm (See TAOPC Vol II, 4.5.2, Alg X)
      * modified according to Michael Penk's solution for Exercice 35
@@ -248,19 +248,19 @@ mpi_invm( MPI x, MPI a, MPI n )
     /* mpi_lshift( u3, k ); */
     mpi_set(x, u1);
 
-    mpi_free(u1);
-    mpi_free(v1);
-    mpi_free(t1);
+    mpi_free_gpg(u1);
+    mpi_free_gpg(v1);
+    mpi_free_gpg(t1);
     if( !odd ) {
-	mpi_free(u2);
-	mpi_free(v2);
-	mpi_free(t2);
+	mpi_free_gpg(u2);
+	mpi_free_gpg(v2);
+	mpi_free_gpg(t2);
     }
-    mpi_free(u3);
-    mpi_free(v3);
-    mpi_free(t3);
+    mpi_free_gpg(u3);
+    mpi_free_gpg(v3);
+    mpi_free_gpg(t3);
 
-    mpi_free(u);
-    mpi_free(v);
+    mpi_free_gpg(u);
+    mpi_free_gpg(v);
 #endif
 }

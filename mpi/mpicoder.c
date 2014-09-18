@@ -118,7 +118,7 @@ mpi_read(IOBUF inp, unsigned *ret_nread, int secure)
 #ifdef M_DEBUG
                 mpi_debug_free (val);
 #else
-                mpi_free (val);
+                mpi_free_gpg (val);
 #endif
                 val = NULL;
                 goto overflow;
@@ -177,7 +177,7 @@ mpi_read_from_buffer(byte *buffer, unsigned int *ret_nread, int secure)
                  because the supplied key was wrong but the OpenPGP
                  checksum didn't caught it. */
 		log_info ("mpi larger than buffer\n");
-                mpi_free (val);
+                mpi_free_gpg (val);
                 val = NULL;
                 goto leave;
           }

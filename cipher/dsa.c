@@ -24,7 +24,7 @@
 #include <assert.h>
 #include "util.h"
 #include "mpi.h"
-#include "cipher.h"
+#include "../include/cipher.h"
 #include "dsa.h"
 
 typedef struct {
@@ -154,9 +154,9 @@ test_keys( DSA_secret_key *sk, unsigned qbits )
     if( !verify( out1_a, out1_b, test, &pk ) )
 	log_fatal("DSA:: sign, verify failed\n");
 
-    mpi_free( test );
-    mpi_free( out1_a );
-    mpi_free( out1_b );
+    mpi_free_gpg( test );
+    mpi_free_gpg( out1_a );
+    mpi_free_gpg( out1_b );
 }
 
 
@@ -224,8 +224,8 @@ generate( DSA_secret_key *sk, unsigned nbits, unsigned qbits,
 	mpi_clear_highbit( x, qbits+1 );
     } while( !( mpi_cmp_ui( x, 0 )>0 && mpi_cmp( x, h )<0 ) );
     xfree(rndbuf);
-    mpi_free( e );
-    mpi_free( h );
+    mpi_free_gpg( e );
+    mpi_free_gpg( h );
 
     /* y = g^x mod p */
     y = mpi_alloc( mpi_get_nlimbs(p) );
@@ -265,7 +265,7 @@ check_secret_key( DSA_secret_key *sk )
 
     mpi_powm( y, sk->g, sk->x, sk->p );
     rc = !mpi_cmp( y, sk->y );
-    mpi_free( y );
+    mpi_free_gpg( y );
     return rc;
 }
 
@@ -304,9 +304,9 @@ sign(MPI r, MPI s, MPI hash, DSA_secret_key *skey )
     mpi_add( tmp, tmp, hash );
     mpi_mulm( s , kinv, tmp, skey->q );
 
-    mpi_free(k);
-    mpi_free(kinv);
-    mpi_free(tmp);
+    mpi_free_gpg(k);
+    mpi_free_gpg(kinv);
+    mpi_free_gpg(tmp);
 }
 
 
@@ -353,10 +353,10 @@ verify(MPI r, MPI s, MPI hash, DSA_public_key *pkey )
 
     rc = !mpi_cmp( v, r );
 
-    mpi_free(w);
-    mpi_free(u1);
-    mpi_free(u2);
-    mpi_free(v);
+    mpi_free_gpg(w);
+    mpi_free_gpg(u1);
+    mpi_free_gpg(u2);
+    mpi_free_gpg(v);
     return rc;
 }
 

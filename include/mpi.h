@@ -56,7 +56,7 @@ typedef struct gcry_mpi *MPI;
 #define mpi_alloc(n)	      mpi_debug_alloc((n), M_DBGINFO( __LINE__ ) )
 #define mpi_alloc_secure(n) mpi_debug_alloc_secure((n), M_DBGINFO( __LINE__ ) )
 #define mpi_alloc_like(n)   mpi_debug_alloc_like((n), M_DBGINFO( __LINE__ ) )
-#define mpi_free(a)	      mpi_debug_free((a), M_DBGINFO(__LINE__) )
+#define mpi_free_gpg(a)	      mpi_debug_free((a), M_DBGINFO(__LINE__) )
 #define mpi_resize(a,b)     mpi_debug_resize((a),(b), M_DBGINFO(__LINE__) )
 #define mpi_copy_gpg(a)	      mpi_debug_copy((a), M_DBGINFO(__LINE__) )
 MPI mpi_debug_alloc( unsigned nlimbs, const char *info );
@@ -69,7 +69,7 @@ MPI  mpi_debug_copy( MPI a, const char *info	);
 MPI mpi_alloc( unsigned nlimbs );
 MPI mpi_alloc_secure( unsigned nlimbs );
 MPI mpi_alloc_like( MPI a );
-void mpi_free( MPI a );
+void mpi_free_gpg( MPI a );
 void mpi_resize( MPI a, unsigned nlimbs );
 MPI  mpi_copy_gpg( MPI a );
 #endif
@@ -134,7 +134,7 @@ void  mpi_tdiv_q_2exp( MPI w, MPI u, unsigned count );
 int   mpi_divisible_ui(MPI dividend, ulong divisor );
 
 /*-- mpi-gcd.c --*/
-int mpi_gcd( MPI g, MPI a, MPI b );
+int mpi_gcd_gpg( MPI g, MPI a, MPI b );
 
 /*-- mpi-pow.c --*/
 void mpi_pow( MPI w, MPI u, MPI v);
@@ -156,7 +156,7 @@ unsigned mpi_trailing_zeros( MPI a );
 void mpi_normalize( MPI a );
 unsigned mpi_get_nbits( MPI a );
 int  mpi_test_bit( MPI a, unsigned n );
-void mpi_set_bit( MPI a, unsigned n );
+void mpi_set_bit_gpg( MPI a, unsigned n );
 void mpi_set_highbit( MPI a, unsigned n );
 void mpi_clear_highbit( MPI a, unsigned n );
 void mpi_clear_bit( MPI a, unsigned n );

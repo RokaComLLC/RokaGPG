@@ -219,7 +219,7 @@ mpi_sub(MPI w, MPI u, MPI v)
 	MPI vv = mpi_copy_gpg(v);
 	vv->sign = !vv->sign;
 	mpi_add( w, u, vv );
-	mpi_free(vv);
+	mpi_free_gpg(vv);
     }
     else {
 	/* fixme: this is not thread-save (we temp. modify v) */

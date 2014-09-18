@@ -18,7 +18,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
+#include "../include/config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,7 +27,7 @@
 #include "util.h"
 #include "errors.h"
 #include "mpi.h"
-#include "cipher.h"
+#include "../include/cipher.h"
 #include "elgamal.h"
 #include "dsa.h"
 #include "rsa.h"
@@ -506,7 +506,7 @@ pubkey_decrypt( int algo, MPI *result, MPI *data, MPI *skey )
 {
     int i, rc;
 
-    *result = NULL; /* so the caller can always do an mpi_free */
+    *result = NULL; /* so the caller can always do an mpi_free_gpg */
     if( DBG_CIPHER ) {
 	log_debug("pubkey_decrypt: algo=%d\n", algo );
 	for(i=0; i < pubkey_get_nskey(algo); i++ )

@@ -191,7 +191,7 @@ get_it( PKT_pubkey_enc *enc, DEK *dek, PKT_secret_key *sk, u32 *keyid )
       if( rc )
 	goto leave;
       frame = mpi_get_buffer( plain_dek, &nframe, NULL );
-      mpi_free( plain_dek ); plain_dek = NULL;
+      mpi_free_gpg( plain_dek ); plain_dek = NULL;
     }
 
     /* Now get the DEK (data encryption key) from the frame
@@ -311,7 +311,7 @@ get_it( PKT_pubkey_enc *enc, DEK *dek, PKT_secret_key *sk, u32 *keyid )
 
 
   leave:
-    mpi_free(plain_dek);
+    mpi_free_gpg(plain_dek);
     xfree(frame);
     return rc;
 }

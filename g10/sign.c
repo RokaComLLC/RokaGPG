@@ -272,7 +272,7 @@ do_sign( PKT_secret_key *sk, PKT_signature *sig,
         if (!frame)
           return G10ERR_GENERAL;
         rc = pubkey_sign( sk->pubkey_algo, sig->data, frame, sk->skey );
-        mpi_free(frame);
+        mpi_free_gpg(frame);
       }
 
     if (!rc && !opt.no_sig_create_check) {
@@ -290,7 +290,7 @@ do_sign( PKT_secret_key *sk, PKT_signature *sig,
             else
                 rc = pubkey_verify (pk->pubkey_algo, frame,
                                     sig->data, pk->pkey );
-            mpi_free (frame);
+            mpi_free_gpg (frame);
         }
         if (rc)
             log_error (_("checking created signature failed: %s\n"),

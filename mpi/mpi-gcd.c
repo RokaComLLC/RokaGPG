@@ -27,12 +27,12 @@
  * Return: true if this 1, false in all other cases
  */
 int
-mpi_gcd( MPI g, MPI xa, MPI xb )
+mpi_gcd_gpg( MPI g, MPI xa, MPI xb )
 {
     MPI a, b;
 
-    a = mpi_copy(xa);
-    b = mpi_copy(xb);
+    a = mpi_copy_gpg(xa);
+    b = mpi_copy_gpg(xb);
 
     /* TAOCP Vol II, 4.5.2, Algorithm A */
     a->sign = 0;
@@ -44,8 +44,8 @@ mpi_gcd( MPI g, MPI xa, MPI xb )
     }
     mpi_set(g, a);
 
-    mpi_free(a);
-    mpi_free(b);
+    mpi_free_gpg(a);
+    mpi_free_gpg(b);
     return !mpi_cmp_ui( g, 1);
 }
 

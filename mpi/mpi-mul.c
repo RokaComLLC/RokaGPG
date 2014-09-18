@@ -193,7 +193,7 @@ mpi_mul( MPI w, MPI u, MPI v)
             /* copy the temp wp from secure memory back to normal memory */
 	    mpi_ptr_t tmp_wp = mpi_alloc_limb_space (wsize, 0);
 	    MPN_COPY (tmp_wp, wp, wsize);
-            mpi_free_limb_space (wp);
+            mpi_free_gpg_limb_space (wp);
             wp = tmp_wp;
         }
 	mpi_assign_limb_space( w, wp, wsize );
@@ -201,7 +201,7 @@ mpi_mul( MPI w, MPI u, MPI v)
     w->nlimbs = wsize;
     w->sign = sign_product;
     if( tmp_limb )
-	mpi_free_limb_space( tmp_limb );
+	mpi_free_gpg_limb_space( tmp_limb );
 }
 
 

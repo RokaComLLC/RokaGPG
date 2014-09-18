@@ -93,8 +93,8 @@ mpi_mulpowm( MPI res, MPI *basearray, MPI *exparray, MPI m)
     }
 
     /* cleanup */
-    mpi_free(tmp);
+    mpi_free_gpg(tmp);
     for(i=0; i < (1<<k); i++ )
-	mpi_free(G[i]);
+	mpi_free_gpg(G[i]);
     xfree(G);
 }

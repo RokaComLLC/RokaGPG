@@ -291,7 +291,7 @@ do_check( PKT_public_key *pk, PKT_signature *sig, MD_HANDLE digest,
     if (!result)
         return G10ERR_GENERAL;
     rc = pubkey_verify( pk->pubkey_algo, result, sig->data, pk->pkey );
-    mpi_free( result );
+    mpi_free_gpg( result );
 
     if(rc==G10ERR_BAD_SIGN && is_RSA(pk->pubkey_algo)
        && sig->digest_algo==DIGEST_ALGO_SHA224)
@@ -316,7 +316,7 @@ do_check( PKT_public_key *pk, PKT_signature *sig, MD_HANDLE digest,
 			       mpi_get_nbits(pk->pkey[0]),asn,DIM(asn));
 
 	rc=pubkey_verify(pk->pubkey_algo,result,sig->data,pk->pkey);
-	mpi_free(result);
+	mpi_free_gpg(result);
       }
 
     /* Print the MD5 warning if not yet done.  Thus at most we get one

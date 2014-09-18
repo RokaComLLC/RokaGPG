@@ -356,7 +356,7 @@ mpihelp_mul_n( mpi_ptr_t prodp, mpi_ptr_t up, mpi_ptr_t vp, mpi_size_t size)
 	    secure = m_is_secure( up );
 	    tspace = mpi_alloc_limb_space( 2 * size, secure );
 	    mpih_sqr_n( prodp, up, size, tspace );
-	    mpi_free_limb_space( tspace );
+	    mpi_free_gpg_limb_space( tspace );
 	}
     }
     else {
@@ -367,7 +367,7 @@ mpihelp_mul_n( mpi_ptr_t prodp, mpi_ptr_t up, mpi_ptr_t vp, mpi_size_t size)
 	    secure = m_is_secure( up ) || m_is_secure( vp );
 	    tspace = mpi_alloc_limb_space( 2 * size, secure );
 	    mul_n (prodp, up, vp, size, tspace);
-	    mpi_free_limb_space( tspace );
+	    mpi_free_gpg_limb_space( tspace );
 	}
     }
 }
@@ -384,7 +384,7 @@ mpihelp_mul_karatsuba_case( mpi_ptr_t prodp,
 
     if( !ctx->tspace || ctx->tspace_size < vsize ) {
 	if( ctx->tspace )
-	    mpi_free_limb_space( ctx->tspace );
+	    mpi_free_gpg_limb_space( ctx->tspace );
 	ctx->tspace = mpi_alloc_limb_space( 2 * vsize,
 				       m_is_secure( up ) || m_is_secure( vp ) );
 	ctx->tspace_size = vsize;
@@ -398,7 +398,7 @@ mpihelp_mul_karatsuba_case( mpi_ptr_t prodp,
     if( usize >= vsize ) {
 	if( !ctx->tp || ctx->tp_size < vsize ) {
 	    if( ctx->tp )
-		mpi_free_limb_space( ctx->tp );
+		mpi_free_gpg_limb_space( ctx->tp );
 	    ctx->tp = mpi_alloc_limb_space( 2 * vsize, m_is_secure( up )
 						      || m_is_secure( vp ) );
 	    ctx->tp_size = vsize;
@@ -440,15 +440,15 @@ mpihelp_release_karatsuba_ctx( struct karatsuba_ctx *ctx )
     struct karatsuba_ctx *ctx2;
 
     if( ctx->tp )
-	mpi_free_limb_space( ctx->tp );
+	mpi_free_gpg_limb_space( ctx->tp );
     if( ctx->tspace )
-	mpi_free_limb_space( ctx->tspace );
+	mpi_free_gpg_limb_space( ctx->tspace );
     for( ctx=ctx->next; ctx; ctx = ctx2 ) {
 	ctx2 = ctx->next;
 	if( ctx->tp )
-	    mpi_free_limb_space( ctx->tp );
+	    mpi_free_gpg_limb_space( ctx->tp );
 	if( ctx->tspace )
-	    mpi_free_limb_space( ctx->tspace );
+	    mpi_free_gpg_limb_space( ctx->tspace );
 	xfree( ctx );
     }
 }

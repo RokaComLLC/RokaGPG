@@ -97,7 +97,7 @@ do_check( PKT_secret_key *sk, const char *tryagain_text, int mode,
                 csumc = p[ndata-2] << 8 | p[ndata-1];
 	    data = xmalloc_secure( ndata );
 	    cipher_decrypt( cipher_hd, data, p, ndata );
-	    mpi_free( sk->skey[i] ); sk->skey[i] = NULL ;
+	    mpi_free_gpg( sk->skey[i] ); sk->skey[i] = NULL ;
 	    p = data;
             if (sk->protect.sha1chk) {
                 /* This is the new SHA1 checksum method to detect
@@ -179,7 +179,7 @@ do_check( PKT_secret_key *sk, const char *tryagain_text, int mode,
                 buffer[1] = p[1];
                 cipher_decrypt (cipher_hd, buffer+2, p+2, ndata-2);
                 csum += checksum (buffer, ndata);
-                mpi_free (sk->skey[i]);
+                mpi_free_gpg (sk->skey[i]);
                 sk->skey[i] = mpi_read_from_buffer (buffer, &ndata, 1);
 		xfree (buffer);
                 if (!sk->skey[i])
@@ -384,7 +384,7 @@ protect_secret_key( PKT_secret_key *sk, DEK *dek )
 		cipher_encrypt( cipher_hd, data, data, ndata );
 		for(i = pubkey_get_npkey(sk->pubkey_algo);
 			i < pubkey_get_nskey(sk->pubkey_algo); i++ ) {
-		    mpi_free( sk->skey[i] );
+		    mpi_free_gpg( sk->skey[i] );
 		    sk->skey[i] = NULL;
 		}
 		i = pubkey_get_npkey(sk->pubkey_algo);
@@ -409,7 +409,7 @@ protect_secret_key( PKT_secret_key *sk, DEK *dek )
 		    cipher_encrypt (cipher_hd, data+2, buffer, nbytes);
 		    xfree( buffer );
 
-                    mpi_free (sk->skey[i]);
+                    mpi_free_gpg (sk->skey[i]);
                     sk->skey[i] = mpi_set_opaque (NULL, data, nbytes+2);
 		}
 		sk->csum = csum;

@@ -22,14 +22,14 @@
  * page 260.
  */
 
-#include "config.h"
+#include "../include/config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 #include "util.h"
 #include "mpi.h"
-#include "cipher.h"
+#include "../include/cipher.h"
 #include "i18n.h"
 
 static int no_of_small_prime_numbers;
@@ -152,7 +152,7 @@ generate_elg_prime( int mode, unsigned pbits, unsigned qbits,
 	if( !perms ) {
 	    /* allocate new primes */
 	    for(i=0; i < m; i++ ) {
-		mpi_free(pool[i]);
+		mpi_free_gpg(pool[i]);
 		pool[i] = NULL;
 	    }
 	    /* init m_out_of_n() */
@@ -191,7 +191,7 @@ generate_elg_prime( int mode, unsigned pbits, unsigned qbits,
 		count1 = 0;
 		qbits++;
 		progress('>');
-                mpi_free (q);
+                mpi_free_gpg (q);
 		q = gen_prime( qbits, 0, 0 );
 		goto next_try;
 	    }
@@ -203,7 +203,7 @@ generate_elg_prime( int mode, unsigned pbits, unsigned qbits,
 		count2 = 0;
 		qbits--;
 		progress('<');
-                mpi_free (q);
+                mpi_free_gpg (q);
 		q = gen_prime( qbits, 0, 0 );
 		goto next_try;
 	    }
@@ -272,21 +272,21 @@ generate_elg_prime( int mode, unsigned pbits, unsigned qbits,
 	    if( DBG_CIPHER )
 		progress('\n');
 	} while( i < n+2 );
-	mpi_free(factors[n+1]);
-	mpi_free(tmp);
-	mpi_free(b);
-	mpi_free(pmin1);
+	mpi_free_gpg(factors[n+1]);
+	mpi_free_gpg(tmp);
+	mpi_free_gpg(b);
+	mpi_free_gpg(pmin1);
     }
     if( !DBG_CIPHER )
 	progress('\n');
 
     xfree( factors );	/* (factors are shallow copies) */
     for(i=0; i < m; i++ )
-	mpi_free( pool[i] );
+	mpi_free_gpg( pool[i] );
     xfree( pool );
     xfree(perms);
-    mpi_free(val_2);
-    mpi_free(q);
+    mpi_free_gpg(val_2);
+    mpi_free_gpg(q);
     return prime;
 }
 
@@ -340,8 +340,8 @@ gen_prime( unsigned int nbits, int secret, int randomlevel )
            the requested keysize we set the 2 high order bits */
 	mpi_set_highbit( prime, nbits-1 );
         if (secret)
-          mpi_set_bit (prime, nbits-2);
-	mpi_set_bit( prime, 0 );
+          mpi_set_bit_gpg (prime, nbits-2);
+	mpi_set_bit_gpg( prime, 0 );
 
 	/* calculate all remainders */
 	for(i=0; (x = small_prime_numbers[i]); i++ )
@@ -375,11 +375,11 @@ gen_prime( unsigned int nbits, int secret, int randomlevel )
 			break; /* step loop, continue with a new prime */
 		    }
 
-		    mpi_free(val_2);
-		    mpi_free(val_3);
-		    mpi_free(result);
-		    mpi_free(pminus1);
-		    mpi_free(prime);
+		    mpi_free_gpg(val_2);
+		    mpi_free_gpg(val_3);
+		    mpi_free_gpg(result);
+		    mpi_free_gpg(pminus1);
+		    mpi_free_gpg(prime);
 		    xfree(mods);
 		    return ptest;
 		}
@@ -415,13 +415,13 @@ check_prime( MPI prime, MPI val_2 )
 	MPI pminus1 = mpi_alloc_like( prime );
 	mpi_sub_ui( pminus1, prime, 1);
 	mpi_powm( result, val_2, pminus1, prime );
-	mpi_free( pminus1 );
+	mpi_free_gpg( pminus1 );
 	if( mpi_cmp_ui( result, 1 ) ) { /* if composite */
-	    mpi_free( result );
+	    mpi_free_gpg( result );
 	    progress('.');
 	    return 0;
 	}
-	mpi_free( result );
+	mpi_free_gpg( result );
     }
 
     /* perform stronger tests */
@@ -493,12 +493,12 @@ is_prime( MPI n, int steps, int *count )
     rc = 1; /* may be a prime */
 
   leave:
-    mpi_free( x );
-    mpi_free( y );
-    mpi_free( z );
-    mpi_free( nminus1 );
-    mpi_free( q );
-    mpi_free (a2);
+    mpi_free_gpg( x );
+    mpi_free_gpg( y );
+    mpi_free_gpg( z );
+    mpi_free_gpg( nminus1 );
+    mpi_free_gpg( q );
+    mpi_free_gpg (a2);
 
     return rc;
 }

@@ -56,7 +56,7 @@ mpi_fdiv_r( MPI rem, MPI dividend, MPI divisor )
 	mpi_add( rem, rem, divisor);
 
     if( temp_divisor )
-	mpi_free(temp_divisor);
+	mpi_free_gpg(temp_divisor);
 }
 
 
@@ -89,7 +89,7 @@ mpi_fdiv_q( MPI quot, MPI dividend, MPI divisor )
 {
     MPI tmp = mpi_alloc( mpi_get_nlimbs(quot) );
     mpi_fdiv_qr( quot, tmp, dividend, divisor);
-    mpi_free(tmp);
+    mpi_free_gpg(tmp);
 }
 
 void
@@ -111,7 +111,7 @@ mpi_fdiv_qr( MPI quot, MPI rem, MPI dividend, MPI divisor )
     }
 
     if( temp_divisor )
-	mpi_free(temp_divisor);
+	mpi_free_gpg(temp_divisor);
 }
 
 
@@ -276,7 +276,7 @@ mpi_tdiv_qr( MPI quot, MPI rem, MPI num, MPI den)
     rem->nlimbs = rsize;
     rem->sign	= sign_remainder;
     while( markidx )
-	mpi_free_limb_space(marker[--markidx]);
+	mpi_free_gpg_limb_space(marker[--markidx]);
 }
 
 void
