@@ -419,6 +419,76 @@ list_all( int secret )
 }
 
 
+char * get_key_fingerprint(char *name, int secret){
+    
+    PKT_secret_key *sk;
+    byte fpr[MAX_FINGERPRINT_LEN+1];
+    size_t n;
+    char *p;
+    int i;
+    
+    sk = xmalloc_clear( sizeof *sk );
+    i = get_seckey_byname( sk, name, 0 );
+    if( i ) {
+        free_secret_key( sk );
+        return NULL;
+    }
+    n = MAX_FINGERPRINT_LEN;
+    fingerprint_from_sk( sk, fpr, &n );
+    free_secret_key( sk );
+    p = xmalloc( 2*n+1 );
+    *p++ = '0';
+    *p++ = 'x';
+    for(i=0; i < n; i++ )
+        sprintf( p+2*i, "%02X", fpr[i] );
+    //p -= 2;
+    return p;
+    
+    /*
+    char *fp = NULL;
+    int rc;
+    
+    rc = get_seckey_byname( &ctx, NULL, names, &keyblock );
+    
+    if( rc ) {
+        
+        log_error("error reading key: %s\n",  g10_errstr(rc) );
+        
+        get_seckey_end( ctx );
+        
+        return;
+        
+    }
+    
+    do {
+        
+        if ((opt.list_options&LIST_SHOW_KEYRING) && !opt.with_colons) {
+            
+            resname = keydb_get_resource_name (get_ctx_handle(ctx));
+            
+            printf("%s: %s\n", keyring_str, resname);
+            
+            for(i = strlen(resname) + strlen(keyring_str) + 2; i; i-- )
+                
+                putchar('-');
+            
+            putchar('\n');
+            
+        }
+        
+        list_keyblock( keyblock, 1, opt.fingerprint, NULL );
+        
+        release_kbnode( keyblock );
+        
+    } while( !get_seckey_next( ctx, NULL, &keyblock ) );
+    
+    get_seckey_end( ctx);
+     
+     */
+    
+   // return fp;
+}
+
 static void
 list_one( STRLIST names, int secret )
 {

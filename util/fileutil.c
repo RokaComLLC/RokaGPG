@@ -39,9 +39,9 @@
 #endif /*!HAVE_W32_SYSTEM*/
 
 
-#include "util.h"
-#include "memory.h"
-#include "ttyio.h"
+#include "../include/util.h"
+#include "../include/memory.h"
+#include "../include/ttyio.h"
 
 
 /***************

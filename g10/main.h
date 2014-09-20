@@ -270,7 +270,7 @@ void dump_attribs(const PKT_user_id *uid,
 void set_attrib_fd(int fd);
 void print_seckey_info (PKT_secret_key *sk);
 void print_pubkey_info (FILE *fp, PKT_public_key *pk);
-
+char * get_key_fingerprint(char *name, int secret);
 
 /*-- verify.c --*/
 void print_file_status( int status, const char *name, int what );
