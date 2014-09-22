@@ -27,6 +27,7 @@ void RokaGPG_Init(void);
 
 + (NSString *) getPubKeyFromKeyRing:(STRLIST)userID;
 
++ (BOOL) importPublicKeyFromFileAtPath:(NSString *)path;
 
 
 @end

@@ -44,7 +44,11 @@
 + (BOOL) importPublicKeyFromFileAtPath:(NSString *)path{
     BOOL bRetVal = FALSE;
     
-    import_keys([path UTF8String],1,NULL,opt.import_options);
+    char *paths[2];
+    paths[0] = [path UTF8String];
+    paths[1] = NULL;
+    
+    import_keys(paths,1,NULL,opt.import_options);
     
     
     return bRetVal;
