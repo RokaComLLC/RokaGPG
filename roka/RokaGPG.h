@@ -21,7 +21,7 @@ void RokaGPG_Init(void);
 
 
 + (NSString *) encryptStr:(NSString *)plainText toUser:(NSString *)user;
-+ (NSString *) decryptStr:(NSString *)cipherText forUser:(NSString *)user;
++ (NSString *) decryptStr:(NSString *)cipherText;
 
 +(void) setPassphrase:(char *)passphrase;
 

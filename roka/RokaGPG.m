@@ -86,7 +86,7 @@
 
 
 
-+ (NSString *) decryptStr:(NSString *)cipherText forUser:(NSString *)user
++ (NSString *) decryptStr:(NSString *)cipherText
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error;
