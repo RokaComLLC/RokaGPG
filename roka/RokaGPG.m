@@ -86,13 +86,11 @@
 
 
 
-+ (NSString *) decryptStr:(char *)inStr
++ (NSString *) decryptStr:(NSString *)cipherText forUser:(NSString *)user
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error;
     NSString *RetVal = nil;
-    
-    NSString *cipherText = [NSMutableString stringWithUTF8String:inStr];
     
     //Create Temporary file
     NSString *tmpFile = [self pathForTemporaryFileWithPrefix:@"ctxt"];
@@ -125,8 +123,7 @@
 }
 
 
-
-
+#ifdef LEGACY
 + (NSString *) encryptStr:(char *)inStr toUsers:(STRLIST)users
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -144,9 +141,49 @@
     
     //Set the outfile
     NSString *outFileName = [tmpFile stringByAppendingString:@".asc"];
-
+    
     //Encrypt file
     encode_crypt( [tmpFile UTF8String], users,0 );
+    
+    NSLog(@"outFile: %@",outFileName);
+    
+    //Read contents and convert to NSString
+    NSString *RetVal = [[NSString alloc] initWithContentsOfFile:outFileName
+                                                   usedEncoding:nil
+                                                          error:nil];
+    
+    //Delete Temporary Files
+    [fileManager removeItemAtPath:tmpFile error:&error];
+    [fileManager removeItemAtPath:outFileName error:&error];
+    
+    
+    return RetVal;
+}
+#endif
+
++ (NSString *) encryptStr:(NSString *)plainText toUser:(NSString *)user
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSError *error;
+
+    
+    //Convert User to STRLIST
+    STRLIST sl = NULL;
+    add_to_strlist(&sl,[user UTF8String]);
+    
+    //Create Temporary file, with the text verision of the plaintext
+    NSString *tmpFile = [self pathForTemporaryFileWithPrefix:@"key"];
+    
+    NSLog(@"tmpFile: %@",tmpFile);
+    
+    //Write String to it
+    [plainText writeToFile:tmpFile atomically:NO encoding:NSStringEncodingConversionAllowLossy error:nil];
+    
+    //Set the outfile
+    NSString *outFileName = [tmpFile stringByAppendingString:@".asc"];
+
+    //Encrypt file
+    encode_crypt( [tmpFile UTF8String], sl,0 );
     
     NSLog(@"outFile: %@",outFileName);
     

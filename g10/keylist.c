@@ -435,6 +435,7 @@ char * get_key_fingerprint(char *name, int secret){
     }
     n = MAX_FINGERPRINT_LEN;
     fingerprint_from_sk( sk, fpr, &n );
+    
     free_secret_key( sk );
     p = xmalloc( 2*n+1 );
     *p++ = '0';
