@@ -273,7 +273,7 @@ void RokaGPG_Init(){
     opt.compress_level = -1; /* defaults to standard compress level */
     opt.bz2_compress_level = -1; /* defaults to standard compress level */
     /* note: if you change these lines, look at oOpenPGP */
-    opt.def_cipher_algo = 0;
+    opt.def_cipher_algo = CIPHER_ALGO_AES256;
     opt.def_digest_algo = 0;
     opt.cert_digest_algo = 0;
     opt.compress_algo = -1; /* defaults to DEFAULT_COMPRESS_ALGO */
