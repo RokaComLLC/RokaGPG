@@ -20,6 +20,8 @@ void g10_exit( int rc );
 void RokaGPG_Init(void);
 
 
++ (NSMutableArray *) getUsers:(NSString *) matchingString;
++ (NSString *) encryptStr:(NSString *)plainText toUsers:(NSArray *)users;
 + (NSString *) encryptStr:(NSString *)plainText toUser:(NSString *)user;
 + (NSString *) decryptStr:(NSString *)cipherText;
 

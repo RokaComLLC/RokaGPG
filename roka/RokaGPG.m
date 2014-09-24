@@ -165,6 +165,9 @@
 }
 #endif
 
+
+
+//Encrypt the string to a single user
 + (NSString *) encryptStr:(NSString *)plainText toUser:(NSString *)user
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -203,6 +206,53 @@
     
     return RetVal;
 }
+
+//Encrypt a string to the list of user's provided by the Array
++ (NSString *) encryptStr:(NSString *)plainText toUsers:(NSArray *)users
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSError *error;
+    
+    
+    //Convert Userlist to STRLIST
+    STRLIST sl = NULL;
+    
+    for (NSString * object in users) {
+		//[data addChild:[self valueElementFromObject:object]];
+        NSLog(@"User: %@", object);
+        add_to_strlist(&sl,[object UTF8String]);
+	}
+    
+    
+    //Create Temporary file, with the text verision of the plaintext
+    NSString *tmpFile = [self pathForTemporaryFileWithPrefix:@"key"];
+    
+    NSLog(@"tmpFile: %@",tmpFile);
+    
+    //Write String to it
+    [plainText writeToFile:tmpFile atomically:NO encoding:NSStringEncodingConversionAllowLossy error:nil];
+    
+    //Set the outfile
+    NSString *outFileName = [tmpFile stringByAppendingString:@".asc"];
+    
+    //Encrypt file
+    encode_crypt( [tmpFile UTF8String], sl,0 );
+    
+    NSLog(@"outFile: %@",outFileName);
+    
+    //Read contents and convert to NSString
+    NSString *RetVal = [[NSString alloc] initWithContentsOfFile:outFileName
+                                                   usedEncoding:nil
+                                                          error:nil];
+    
+    //Delete Temporary Files
+    [fileManager removeItemAtPath:tmpFile error:&error];
+    [fileManager removeItemAtPath:outFileName error:&error];
+    
+    
+    return RetVal;
+}
+
 
 
 +(void) setPassphrase:(char *)passphrase{
