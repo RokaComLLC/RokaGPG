@@ -2923,6 +2923,8 @@ enum_secret_keys( void **context, PKT_secret_key *sk,
  ***********  user ID printing helpers *******
  *********************************************/
 
+
+
 /****************
  * Return a string with a printable representation of the user_id.
  * this string must be freed by xfree.

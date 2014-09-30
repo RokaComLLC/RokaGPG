@@ -40,6 +40,12 @@
 
 static void list_all(int);
 static void list_one( STRLIST names, int secret);
+void get_all_userids(int secret );
+static void
+list_keyblock_print ( KBNODE keyblock, int secret, int fpr, void *opaque );
+
+
+
 
 
 struct sig_stats
@@ -50,6 +56,9 @@ struct sig_stats
 };
 
 static FILE *attrib_fp=NULL;
+
+
+
 
 
 
@@ -357,6 +366,71 @@ print_signature_stats(struct sig_stats *s)
   else if( s->oth_err )
     tty_printf(_("%d signatures not checked due to errors\n"), s->oth_err );
 }
+
+
+void
+get_all_userids(int secret )
+{
+    KEYDB_HANDLE hd;
+    KBNODE keyblock = NULL;
+    int rc=0;
+    
+    hd = keydb_new (secret);
+    if (!hd)
+        rc = G10ERR_GENERAL;
+    else
+        rc = keydb_search_first (hd);
+    if( rc ) {
+        if( rc != -1 )
+            log_error("keydb_search_first failed: %s\n", g10_errstr(rc) );
+        goto leave;
+    }
+    
+    do {
+        rc = keydb_get_keyblock (hd, &keyblock);
+        if (rc) {
+            log_error ("keydb_get_keyblock failed: %s\n", g10_errstr(rc));
+            goto leave;
+        }
+        
+        merge_keys_and_selfsig( keyblock );
+        
+        do_reorder_keyblock(keyblock,1);
+        do_reorder_keyblock(keyblock,0);
+        
+        KBNODE kbctx;
+        KBNODE node;
+        
+        /* get the keyid from the keyblock */
+        node = find_kbnode( keyblock, secret? PKT_SECRET_KEY : PKT_PUBLIC_KEY );
+        if( !node ) {
+            log_error("Oops; key lost!\n");
+            dump_kbnode( keyblock );
+            return;
+        }
+        
+        
+        for( kbctx=NULL; (node=walk_kbnode( keyblock, &kbctx, 0)) ; ) {
+            if( node->pkt->pkttype == PKT_USER_ID && !opt.fast_list_mode ) {
+                PKT_user_id *uid=node->pkt->pkt.user_id;
+                print_utf8_string( stdout, uid->name, uid->len );
+                putchar('\n');
+                
+            }
+            
+        }
+        putchar('\n');
+        
+        release_kbnode( keyblock );
+        keyblock = NULL;
+    } while (!(rc = keydb_search_next (hd)));
+    
+leave:
+    release_kbnode (keyblock);
+    keydb_release (hd);
+}
+
+
 
 static void
 list_all( int secret )
@@ -766,238 +840,238 @@ list_keyblock_print ( KBNODE keyblock, int secret, int fpr, void *opaque )
     PKT_secret_key *sk;
     struct sig_stats *stats=opaque;
     int skip_sigs=0;
-
+    
     /* get the keyid from the keyblock */
     node = find_kbnode( keyblock, secret? PKT_SECRET_KEY : PKT_PUBLIC_KEY );
     if( !node ) {
-	log_error("Oops; key lost!\n");
-	dump_kbnode( keyblock );
-	return;
+        log_error("Oops; key lost!\n");
+        dump_kbnode( keyblock );
+        return;
     }
-
+    
     if( secret )
-      {
-	pk = NULL;
-	sk = node->pkt->pkt.secret_key;
-
+    {
+        pk = NULL;
+        sk = node->pkt->pkt.secret_key;
+        
         printf("sec%c  %4u%c/%s %s",(sk->protect.s2k.mode==1001)?'#':
-	       (sk->protect.s2k.mode==1002)?'>':' ',
-	       nbits_from_sk( sk ),pubkey_letter( sk->pubkey_algo ),
-	       keystr_from_sk(sk),datestr_from_sk( sk ));
-
-	if(sk->has_expired)
-	  {
-	    printf(" [");
-	    printf(_("expired: %s"),expirestr_from_sk(sk));
-	    printf("]");
-	  }
-	else if(sk->expiredate )
-	  {
-	    printf(" [");
-	    printf(_("expires: %s"),expirestr_from_sk(sk));
-	    printf("]");
-	  }
-
-	printf("\n");
-      }
+               (sk->protect.s2k.mode==1002)?'>':' ',
+               nbits_from_sk( sk ),pubkey_letter( sk->pubkey_algo ),
+               keystr_from_sk(sk),datestr_from_sk( sk ));
+        
+        if(sk->has_expired)
+        {
+            printf(" [");
+            printf(_("expired: %s"),expirestr_from_sk(sk));
+            printf("]");
+        }
+        else if(sk->expiredate )
+        {
+            printf(" [");
+            printf(_("expires: %s"),expirestr_from_sk(sk));
+            printf("]");
+        }
+        
+        printf("\n");
+    }
     else
-      {
-	pk = node->pkt->pkt.public_key;
-	sk = NULL;
-
-	check_trustdb_stale();
-
-	printf("pub   %4u%c/%s %s",
-	       nbits_from_pk(pk),pubkey_letter(pk->pubkey_algo),
-	       keystr_from_pk(pk),datestr_from_pk( pk ));
-
-	/* We didn't include this before in the key listing, but there
-	   is room in the new format, so why not? */
-
-	if(pk->is_revoked)
-	  {
-	    printf(" [");
-	    printf(_("revoked: %s"),revokestr_from_pk(pk));
-	    printf("]");
-	  }
-	else if(pk->has_expired)
-	  {
-	    printf(" [");
-	    printf(_("expired: %s"),expirestr_from_pk(pk));
-	    printf("]");
-	  }
-	else if(pk->expiredate)
-	  {
-	    printf(" [");
-	    printf(_("expires: %s"),expirestr_from_pk(pk));
-	    printf("]");
-	  }
-
+    {
+        pk = node->pkt->pkt.public_key;
+        sk = NULL;
+        
+        check_trustdb_stale();
+        
+        printf("pub   %4u%c/%s %s",
+               nbits_from_pk(pk),pubkey_letter(pk->pubkey_algo),
+               keystr_from_pk(pk),datestr_from_pk( pk ));
+        
+        /* We didn't include this before in the key listing, but there
+         is room in the new format, so why not? */
+        
+        if(pk->is_revoked)
+        {
+            printf(" [");
+            printf(_("revoked: %s"),revokestr_from_pk(pk));
+            printf("]");
+        }
+        else if(pk->has_expired)
+        {
+            printf(" [");
+            printf(_("expired: %s"),expirestr_from_pk(pk));
+            printf("]");
+        }
+        else if(pk->expiredate)
+        {
+            printf(" [");
+            printf(_("expires: %s"),expirestr_from_pk(pk));
+            printf("]");
+        }
+        
 #if 0
-	/* I need to think about this some more.  It's easy enough to
-	   include, but it looks sort of confusing in the
-	   listing... */
-	if(opt.list_options&LIST_SHOW_VALIDITY)
-	  {
-	    int validity=get_validity(pk,NULL);
-	    printf(" [%s]",trust_value_to_string(validity));
-	  }
+        /* I need to think about this some more.  It's easy enough to
+         include, but it looks sort of confusing in the
+         listing... */
+        if(opt.list_options&LIST_SHOW_VALIDITY)
+        {
+            int validity=get_validity(pk,NULL);
+            printf(" [%s]",trust_value_to_string(validity));
+        }
 #endif
-
-	printf("\n");
-      }
-
+        
+        printf("\n");
+    }
+    
     if( fpr )
-      print_fingerprint( pk, sk, 0 );
-   // print_card_serialno (sk);
+        print_fingerprint( pk, sk, 0 );
+    // print_card_serialno (sk);
     if( opt.with_key_data )
-      print_key_data( pk );
-
+        print_key_data( pk );
+    
     for( kbctx=NULL; (node=walk_kbnode( keyblock, &kbctx, 0)) ; ) {
-	if( node->pkt->pkttype == PKT_USER_ID && !opt.fast_list_mode ) {
-	    PKT_user_id *uid=node->pkt->pkt.user_id;
-
-	    if(pk && (uid->is_expired || uid->is_revoked)
-	       && !(opt.list_options&LIST_SHOW_UNUSABLE_UIDS))
-	      {
-		skip_sigs=1;
-		continue;
-	      }
-	    else
-	      skip_sigs=0;
-
-	    if(attrib_fp && uid->attrib_data!=NULL)
-	      dump_attribs(uid,pk,sk);
-
-	    if((uid->is_revoked || uid->is_expired)
-	       || ((opt.list_options&LIST_SHOW_UID_VALIDITY) && pk))
-	      {
-		const char *validity;
-		int indent;
-
-		validity=uid_trust_string_fixed(pk,uid);
-		indent=(keystrlen()+9)-atoi(uid_trust_string_fixed(NULL,NULL));
-
-		if(indent<0 || indent>40)
-		  indent=0;
-
-		printf("uid%*s%s ",indent,"",validity);
-	      }
-	    else
-	      printf("uid%*s", (int)keystrlen()+10,"");
-
+        if( node->pkt->pkttype == PKT_USER_ID && !opt.fast_list_mode ) {
+            PKT_user_id *uid=node->pkt->pkt.user_id;
+            
+            if(pk && (uid->is_expired || uid->is_revoked)
+               && !(opt.list_options&LIST_SHOW_UNUSABLE_UIDS))
+            {
+                skip_sigs=1;
+                continue;
+            }
+            else
+                skip_sigs=0;
+            
+            if(attrib_fp && uid->attrib_data!=NULL)
+                dump_attribs(uid,pk,sk);
+            
+            if((uid->is_revoked || uid->is_expired)
+               || ((opt.list_options&LIST_SHOW_UID_VALIDITY) && pk))
+            {
+                const char *validity;
+                int indent;
+                
+                validity=uid_trust_string_fixed(pk,uid);
+                indent=(keystrlen()+9)-atoi(uid_trust_string_fixed(NULL,NULL));
+                
+                if(indent<0 || indent>40)
+                    indent=0;
+                
+                printf("uid%*s%s ",indent,"",validity);
+            }
+            else
+                printf("uid%*s", (int)keystrlen()+10,"");
+            
             print_utf8_string( stdout, uid->name, uid->len );
-	    putchar('\n');
-
-	    if((opt.list_options&LIST_SHOW_PHOTOS) && uid->attribs!=NULL)
-	      show_photos(uid->attribs,uid->numattribs,pk,sk,uid);
-	}
-	else if( node->pkt->pkttype == PKT_PUBLIC_SUBKEY )
-	  {
-	    PKT_public_key *pk2 = node->pkt->pkt.public_key;
-
-	    if((pk2->is_revoked || pk2->has_expired)
-	       && !(opt.list_options&LIST_SHOW_UNUSABLE_SUBKEYS))
-	      {
-		skip_sigs=1;
-		continue;
-	      }
-	    else
-	      skip_sigs=0;
-
-            printf("sub   %4u%c/%s %s",
-		   nbits_from_pk( pk2 ),pubkey_letter( pk2->pubkey_algo ),
-		   keystr_from_pk(pk2),datestr_from_pk(pk2));
-	    if( pk2->is_revoked )
-	      {
-		printf(" [");
-		printf(_("revoked: %s"),revokestr_from_pk(pk2));
-		printf("]");
-	      }
-	    else if( pk2->has_expired )
-	      {
-		printf(" [");
-		printf(_("expired: %s"),expirestr_from_pk(pk2));
-		printf("]");
-	      }
-	    else if( pk2->expiredate )
-	      {
-		printf(" [");
-		printf(_("expires: %s"),expirestr_from_pk(pk2));
-		printf("]");
-	      }
             putchar('\n');
-	    if( fpr > 1 )
-	      print_fingerprint( pk2, NULL, 0 );
-	    if( opt.with_key_data )
-	      print_key_data( pk2 );
-	  }
-	else if( node->pkt->pkttype == PKT_SECRET_SUBKEY )
-	  {
-	    PKT_secret_key *sk2 = node->pkt->pkt.secret_key;
-
+            
+            if((opt.list_options&LIST_SHOW_PHOTOS) && uid->attribs!=NULL)
+                show_photos(uid->attribs,uid->numattribs,pk,sk,uid);
+        }
+        else if( node->pkt->pkttype == PKT_PUBLIC_SUBKEY )
+        {
+            PKT_public_key *pk2 = node->pkt->pkt.public_key;
+            
+            if((pk2->is_revoked || pk2->has_expired)
+               && !(opt.list_options&LIST_SHOW_UNUSABLE_SUBKEYS))
+            {
+                skip_sigs=1;
+                continue;
+            }
+            else
+                skip_sigs=0;
+            
+            printf("sub   %4u%c/%s %s",
+                   nbits_from_pk( pk2 ),pubkey_letter( pk2->pubkey_algo ),
+                   keystr_from_pk(pk2),datestr_from_pk(pk2));
+            if( pk2->is_revoked )
+            {
+                printf(" [");
+                printf(_("revoked: %s"),revokestr_from_pk(pk2));
+                printf("]");
+            }
+            else if( pk2->has_expired )
+            {
+                printf(" [");
+                printf(_("expired: %s"),expirestr_from_pk(pk2));
+                printf("]");
+            }
+            else if( pk2->expiredate )
+            {
+                printf(" [");
+                printf(_("expires: %s"),expirestr_from_pk(pk2));
+                printf("]");
+            }
+            putchar('\n');
+            if( fpr > 1 )
+                print_fingerprint( pk2, NULL, 0 );
+            if( opt.with_key_data )
+                print_key_data( pk2 );
+        }
+        else if( node->pkt->pkttype == PKT_SECRET_SUBKEY )
+        {
+            PKT_secret_key *sk2 = node->pkt->pkt.secret_key;
+            
             printf("ssb%c  %4u%c/%s %s",
                    (sk2->protect.s2k.mode==1001)?'#':
                    (sk2->protect.s2k.mode==1002)?'>':' ',
-		   nbits_from_sk( sk2 ),pubkey_letter( sk2->pubkey_algo ),
-		   keystr_from_sk(sk2),datestr_from_sk( sk2 ) );
+                   nbits_from_sk( sk2 ),pubkey_letter( sk2->pubkey_algo ),
+                   keystr_from_sk(sk2),datestr_from_sk( sk2 ) );
             if( sk2->expiredate )
-	      {
-		printf(" [");
-		printf(_("expires: %s"),expirestr_from_sk(sk2));
-		printf("]");
-	      }
-	    putchar('\n');
-	    if( fpr > 1 )
-              {
+            {
+                printf(" [");
+                printf(_("expires: %s"),expirestr_from_sk(sk2));
+                printf("]");
+            }
+            putchar('\n');
+            if( fpr > 1 )
+            {
                 print_fingerprint( NULL, sk2, 0 );
                 //print_card_serialno (sk2);
-              }
-	  }
-	else if( opt.list_sigs
-		 && node->pkt->pkttype == PKT_SIGNATURE
-		 && !skip_sigs ) {
-	    PKT_signature *sig = node->pkt->pkt.signature;
-	    int sigrc;
+            }
+        }
+        else if( opt.list_sigs
+                && node->pkt->pkttype == PKT_SIGNATURE
+                && !skip_sigs ) {
+            PKT_signature *sig = node->pkt->pkt.signature;
+            int sigrc;
             char *sigstr;
-
-	    if( stats ) {
+            
+            if( stats ) {
                 /*fflush(stdout);*/
-		rc = check_key_signature( keyblock, node, NULL );
-		switch( rc ) {
-		 case 0:		 sigrc = '!'; break;
-		 case G10ERR_BAD_SIGN:   stats->inv_sigs++; sigrc = '-'; break;
-		 case G10ERR_NO_PUBKEY: 
-		 case G10ERR_UNU_PUBKEY: stats->no_key++; continue;
-		 default:		 stats->oth_err++; sigrc = '%'; break;
-		}
-
-		/* TODO: Make sure a cached sig record here still has
-                   the pk that issued it.  See also
-                   keyedit.c:print_and_check_one_sig */
-	    }
-	    else {
-		rc = 0;
-		sigrc = ' ';
-	    }
-
-	    if( sig->sig_class == 0x20 || sig->sig_class == 0x28
-				       || sig->sig_class == 0x30 )
-	       sigstr = "rev";
-	    else if( (sig->sig_class&~3) == 0x10 )
-	       sigstr = "sig";
-	    else if( sig->sig_class == 0x18 )
-	       sigstr = "sig";
-	    else if( sig->sig_class == 0x1F )
-	       sigstr = "sig";
-	    else {
+                rc = check_key_signature( keyblock, node, NULL );
+                switch( rc ) {
+                    case 0:		 sigrc = '!'; break;
+                    case G10ERR_BAD_SIGN:   stats->inv_sigs++; sigrc = '-'; break;
+                    case G10ERR_NO_PUBKEY:
+                    case G10ERR_UNU_PUBKEY: stats->no_key++; continue;
+                    default:		 stats->oth_err++; sigrc = '%'; break;
+                }
+                
+                /* TODO: Make sure a cached sig record here still has
+                 the pk that issued it.  See also
+                 keyedit.c:print_and_check_one_sig */
+            }
+            else {
+                rc = 0;
+                sigrc = ' ';
+            }
+            
+            if( sig->sig_class == 0x20 || sig->sig_class == 0x28
+               || sig->sig_class == 0x30 )
+                sigstr = "rev";
+            else if( (sig->sig_class&~3) == 0x10 )
+                sigstr = "sig";
+            else if( sig->sig_class == 0x18 )
+                sigstr = "sig";
+            else if( sig->sig_class == 0x1F )
+                sigstr = "sig";
+            else {
                 printf("sig                             "
-		       "[unexpected signature class 0x%02x]\n",sig->sig_class );
-		continue;
-	    }
-
+                       "[unexpected signature class 0x%02x]\n",sig->sig_class );
+                continue;
+            }
+            
             fputs( sigstr, stdout );
-	    printf("%c%c %c%c%c%c%c%c %s %s",
+            printf("%c%c %c%c%c%c%c%c %s %s",
                    sigrc,(sig->sig_class-0x10>0 &&
                           sig->sig_class-0x10<4)?'0'+sig->sig_class-0x10:' ',
                    sig->flags.exportable?' ':'L',
@@ -1005,42 +1079,43 @@ list_keyblock_print ( KBNODE keyblock, int secret, int fpr, void *opaque )
                    sig->flags.policy_url?'P':' ',
                    sig->flags.notation?'N':' ',
                    sig->flags.expired?'X':' ',
-		   (sig->trust_depth>9)?'T':
-		   (sig->trust_depth>0)?'0'+sig->trust_depth:' ',
-		   keystr(sig->keyid),datestr_from_sig(sig));
-	    if(opt.list_options&LIST_SHOW_SIG_EXPIRE)
-	      printf(" %s", expirestr_from_sig(sig));
-	    printf("  ");
-	    if( sigrc == '%' )
-		printf("[%s] ", g10_errstr(rc) );
-	    else if( sigrc == '?' )
-		;
-	    else if ( !opt.fast_list_mode ) {
-		size_t n;
-		char *p = get_user_id( sig->keyid, &n );
+                   (sig->trust_depth>9)?'T':
+                   (sig->trust_depth>0)?'0'+sig->trust_depth:' ',
+                   keystr(sig->keyid),datestr_from_sig(sig));
+            if(opt.list_options&LIST_SHOW_SIG_EXPIRE)
+                printf(" %s", expirestr_from_sig(sig));
+            printf("  ");
+            if( sigrc == '%' )
+                printf("[%s] ", g10_errstr(rc) );
+            else if( sigrc == '?' )
+                ;
+            else if ( !opt.fast_list_mode ) {
+                size_t n;
+                char *p = get_user_id( sig->keyid, &n );
                 print_utf8_string( stdout, p, n );
-		xfree(p);
-	    }
-	    putchar('\n');
-
-	    if(sig->flags.policy_url
-	       && (opt.list_options&LIST_SHOW_POLICY_URLS))
-	      show_policy_url(sig,3,0);
-
-	    if(sig->flags.notation && (opt.list_options&LIST_SHOW_NOTATIONS))
-	      show_notation(sig,3,0,
-			    ((opt.list_options&LIST_SHOW_STD_NOTATIONS)?1:0)+
-			    ((opt.list_options&LIST_SHOW_USER_NOTATIONS)?2:0));
-
-	    if(sig->flags.pref_ks
-	       && (opt.list_options&LIST_SHOW_KEYSERVER_URLS))
-	      show_keyserver_url(sig,3,0);
-
-	    /* fixme: check or list other sigs here */
-	}
+                xfree(p);
+            }
+            putchar('\n');
+            
+            if(sig->flags.policy_url
+               && (opt.list_options&LIST_SHOW_POLICY_URLS))
+                show_policy_url(sig,3,0);
+            
+            if(sig->flags.notation && (opt.list_options&LIST_SHOW_NOTATIONS))
+                show_notation(sig,3,0,
+                              ((opt.list_options&LIST_SHOW_STD_NOTATIONS)?1:0)+
+                              ((opt.list_options&LIST_SHOW_USER_NOTATIONS)?2:0));
+            
+            if(sig->flags.pref_ks
+               && (opt.list_options&LIST_SHOW_KEYSERVER_URLS))
+                show_keyserver_url(sig,3,0);
+            
+            /* fixme: check or list other sigs here */
+        }
     }
     putchar('\n');
 }
+
 
 
 void
@@ -1436,7 +1511,7 @@ list_keyblock_colon( KBNODE keyblock, int secret, int fpr )
  * Reorder the keyblock so that the primary user ID (and not attribute
  * packet) comes first.  Fixme: Replace this by a generic sort
  * function.  */
-static void
+void
 do_reorder_keyblock (KBNODE keyblock,int attr)
 {
     KBNODE primary = NULL, primary0 = NULL, primary2 = NULL;

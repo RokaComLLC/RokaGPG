@@ -271,6 +271,8 @@ void set_attrib_fd(int fd);
 void print_seckey_info (PKT_secret_key *sk);
 void print_pubkey_info (FILE *fp, PKT_public_key *pk);
 char * get_key_fingerprint(char *name, int secret);
+void do_reorder_keyblock (KBNODE keyblock,int attr);
+
 
 /*-- verify.c --*/
 void print_file_status( int status, const char *name, int what );

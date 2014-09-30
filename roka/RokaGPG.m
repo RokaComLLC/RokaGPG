@@ -17,6 +17,98 @@
 
 @implementation RokaGPG
 
+//
+//Return a list of users that BEGIN with the matchingString
+//
++ (NSMutableArray *) getUsers:(NSString *) matchingString{
+    NSMutableArray *users = [[NSMutableArray alloc] init];;
+    
+    
+   // users[0]=@"bob*";
+    
+    //users[0] = @"bob@rokacom.com";
+    //users[1] = @"bob@aol.com";
+    //users[2] = @"bob@bobnet.com";
+    
+
+    
+    /* We need to do the stale check right here because it might need to
+     update the keyring while we already have the keyring open.  This
+     is very bad for W32 because of a sharing violation. For real OSes
+     it might lead to false results if we are later listing a keyring
+     which is associated with the inode of a deleted file.  */
+    check_trustdb_stale ();
+    
+    
+    //get_all_userids( 0 );
+    
+    KEYDB_HANDLE hd;
+    KBNODE keyblock = NULL;
+    int rc=0;
+    
+    hd = keydb_new (0);
+    if (!hd)
+        rc = G10ERR_GENERAL;
+    else
+        rc = keydb_search_first (hd);
+    if( rc ) {
+        if( rc != -1 )
+            log_error("keydb_search_first failed: %s\n", g10_errstr(rc) );
+        goto leave;
+    }
+    
+    do {
+        rc = keydb_get_keyblock (hd, &keyblock);
+        if (rc) {
+            log_error ("keydb_get_keyblock failed: %s\n", g10_errstr(rc));
+            goto leave;
+        }
+        
+        merge_keys_and_selfsig( keyblock );
+        
+        do_reorder_keyblock(keyblock,1);
+        do_reorder_keyblock(keyblock,0);
+        
+        KBNODE kbctx;
+        KBNODE node;
+        
+        /* get the keyid from the keyblock */
+        node = find_kbnode( keyblock, PKT_PUBLIC_KEY );
+        if( !node ) {
+            goto leave;
+        }
+        
+        
+        for( kbctx=NULL; (node=walk_kbnode( keyblock, &kbctx, 0)) ; ) {
+            if( node->pkt->pkttype == PKT_USER_ID && !opt.fast_list_mode ) {
+                PKT_user_id *uid=node->pkt->pkt.user_id;
+
+                NSString *tmpUID = [NSString stringWithUTF8String:uid->name];
+                NSLog(@"tmpUID: %@",tmpUID);
+                if( [tmpUID hasPrefix:matchingString]){
+                    [users addObject:tmpUID];
+                }
+                
+                
+            }
+            
+        }
+        putchar('\n');
+        
+        release_kbnode( keyblock );
+        keyblock = NULL;
+    } while (!(rc = keydb_search_next (hd)));
+    
+leave:
+    release_kbnode (keyblock);
+    keydb_release (hd);
+    
+    
+    NSLog(@"users %@",users);
+    
+    return users;
+}
+
 + (NSString *)pathForTemporaryFileWithPrefix:(NSString *)prefix
 {
     NSString *  result;
