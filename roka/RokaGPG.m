@@ -198,7 +198,7 @@ leave:
     
     //Set the outfile
     NSString *outFileName = [self pathForTemporaryFileWithPrefix:@"out"];
-    opt.outfile =  [outFileName UTF8String];
+    opt.outfile =  (char *)[outFileName UTF8String];
     
     //Encrypt file
     decrypt_message( [tmpFile UTF8String]);

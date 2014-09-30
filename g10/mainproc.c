@@ -641,6 +641,8 @@ proc_plaintext( CTX c, PACKET *pkt )
 	log_info(_("original file name='%.*s'\n"), pt->namelen, pt->name);
     free_md_filter_context( &c->mfx );
     c->mfx.md = md_open( 0, 0);
+    
+    
     /* fixme: we may need to push the textfilter if we have sigclass 1
      * and no armoring - Not yet tested
      * Hmmm, why don't we need it at all if we have sigclass 1

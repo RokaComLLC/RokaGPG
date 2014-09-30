@@ -55,6 +55,9 @@ decrypt_message( const char *filename )
     int rc;
     int no_out=0;
 
+    //MIKE - memzero the afx and pfx
+    
+    
     /* open the message file */
     fp = iobuf_open(filename);
     if (fp && is_secured_file (iobuf_get_fd (fp)))
@@ -64,8 +67,8 @@ decrypt_message( const char *filename )
         errno = EPERM;
       }
     if( !fp ) {
-	log_error(_("can't open `%s'\n"), print_fname_stdin(filename));
-	return G10ERR_OPEN_FILE;
+	  log_error(_("can't open `%s'\n"), print_fname_stdin(filename));
+	  return G10ERR_OPEN_FILE;
     }
 
     handle_progress (&pfx, fp, filename);
@@ -86,6 +89,12 @@ decrypt_message( const char *filename )
     if( no_out )
        opt.outfile = NULL;
     iobuf_close(fp);
+    
+    
+    //ELMO - reset literals seen so we can go multiple rounds
+    reset_literals_seen();
+
+    
     return rc;
 }
 
