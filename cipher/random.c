@@ -351,6 +351,8 @@ get_random_bits( size_t nbits, int level, int secure )
 	p += n;
     }
      */
+    
+    
     return buf;
 }
 

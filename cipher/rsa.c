@@ -105,6 +105,9 @@ generate( RSA_secret_key *sk, unsigned nbits )
     MPI g;
     MPI f;
 
+    
+    //ELMO - use iOS RSA Key Generator
+    
     /* make sure that nbits is even so that we generate p, q of equal size */
     if ( (nbits&1) )
       nbits++;
