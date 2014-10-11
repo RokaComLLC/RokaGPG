@@ -26,6 +26,8 @@
  */
 
 
+#include <Security/SecRandom.h>
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -322,6 +324,8 @@ get_random_bits( size_t nbits, int level, int secure )
     byte *buf, *p;
     size_t nbytes = (nbits+7)/8;
 
+    
+    
     if( quick_test && level > 1 )
 	level = 1;
     MASK_LEVEL(level);
@@ -335,12 +339,18 @@ get_random_bits( size_t nbits, int level, int secure )
     }
 
     buf = secure && secure_alloc ? xmalloc_secure( nbytes ) : xmalloc( nbytes );
+    
+   SecRandomCopyBytes ( kSecRandomDefault, nbytes, buf );
+
+    
+    /*
     for( p = buf; nbytes > 0; ) {
 	size_t n = nbytes > POOLSIZE? POOLSIZE : nbytes;
 	read_pool( p, n, level );
 	nbytes -= n;
 	p += n;
     }
+     */
     return buf;
 }
 
