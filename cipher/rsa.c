@@ -31,6 +31,8 @@
 #include "mpi.h"
 #include "../include/cipher.h"
 #include "rsa.h"
+#include "openssl/rsa.h"
+
 
 /* Blinding is used to mitigate side-channel attacks.  You may undef
    this to speed up the operation in case the system is secured
@@ -372,13 +374,39 @@ rsa_generate( int algo, unsigned nbits, MPI *skey, MPI **retfactors )
     if( !is_RSA(algo) )
 	return G10ERR_PUBKEY_ALGO;
 
+
+    
+    //ELMO
+    
+   /*
+    
+    unsigned long e = 65537;
+
+   	RSA            *rsa;
+    rsa = RSA_generate_key(nbits, e, NULL, NULL);
+    
+
+    skey[0] = rsa->n;
+    skey[1] = rsa->e;
+    skey[2] = rsa->d;
+    skey[3] = rsa->p;
+    skey[4] = rsa->q;
+   // skey[5] = rsa->u;
+    */
+ 
+ 
+    //oriignal key generation
     generate( &sk, nbits );
+     
+    
     skey[0] = sk.n;
     skey[1] = sk.e;
     skey[2] = sk.d;
     skey[3] = sk.p;
     skey[4] = sk.q;
     skey[5] = sk.u;
+     
+     
     /* make an empty list of factors */
     if (retfactors)
       *retfactors = xmalloc_clear( 1 * sizeof **retfactors );

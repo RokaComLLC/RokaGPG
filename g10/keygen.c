@@ -1283,6 +1283,10 @@ gen_dsa(unsigned int nbits, KBNODE pub_root, KBNODE sec_root, DEK *dek,
 }
 
 
+
+
+
+
 /*
  * Generate an RSA key.
  */
@@ -1319,6 +1323,12 @@ gen_rsa(int algo, unsigned nbits, KBNODE pub_root, KBNODE sec_root, DEK *dek,
         log_error("pubkey_generate failed: %s\n", g10_errstr(rc) );
         return rc;
     }
+    
+    
+    
+    
+    
+    
 
     sk = xmalloc_clear( sizeof *sk );
     pk = xmalloc_clear( sizeof *pk );
@@ -1328,8 +1338,10 @@ gen_rsa(int algo, unsigned nbits, KBNODE pub_root, KBNODE sec_root, DEK *dek,
       sk->expiredate = pk->expiredate = sk->timestamp + expireval;
 
     sk->pubkey_algo = pk->pubkey_algo = algo;
-		       pk->pkey[0] = mpi_copy_gpg( skey[0] );
-		       pk->pkey[1] = mpi_copy_gpg( skey[1] );
+    
+    pk->pkey[0] = mpi_copy_gpg( skey[0] );
+    pk->pkey[1] = mpi_copy_gpg( skey[1] );
+    
     sk->skey[0] = skey[0];
     sk->skey[1] = skey[1];
     sk->skey[2] = skey[2];
